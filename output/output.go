@@ -19,6 +19,11 @@ type statusEntry struct {
 
 var statusPatterns []statusEntry
 
+var (
+	agePattern = regexp.MustCompile(`\b[1-9]\d*[smhd]\b`)
+	headerLine = regexp.MustCompile(`^[A-Z][A-Z\s/]+$`)
+)
+
 func init() {
 	raw := map[string]string{
 		`\bCrashLoopBackOff\b`:           "error",
@@ -69,8 +74,6 @@ func init() {
 	}
 }
 
-var headerLine = regexp.MustCompile(`^[A-Z][A-Z\s/]+$`)
-
 func (p *Processor) Process(output string) string {
 	if !p.Colour {
 		return output
@@ -80,8 +83,7 @@ func (p *Processor) Process(output string) string {
 	var buf strings.Builder
 
 	for _, line := range lines {
-		line = p.processLine(line)
-		buf.WriteString(line)
+		buf.WriteString(p.processLine(line))
 	}
 
 	return buf.String()
@@ -101,16 +103,21 @@ func (p *Processor) processLine(line string) string {
 		return p.applyStyle(line, "header")
 	}
 
-	return p.colorizeStatuses(line)
+	result := p.colorizeStatusWords(line)
+	result = agePattern.ReplaceAllStringFunc(result, func(match string) string {
+		return p.wrapStyle(match, "dim")
+	})
+	return result
 }
 
-func (p *Processor) colorizeStatuses(line string) string {
+func (p *Processor) colorizeStatusWords(text string) string {
+	result := text
 	for _, entry := range statusPatterns {
-		if entry.pattern.MatchString(line) {
-			return p.applyStyle(line, entry.token)
-		}
+		result = entry.pattern.ReplaceAllStringFunc(result, func(match string) string {
+			return p.wrapStyle(match, entry.token)
+		})
 	}
-	return line
+	return result
 }
 
 func (p *Processor) applyStyle(line, token string) string {
@@ -119,4 +126,12 @@ func (p *Processor) applyStyle(line, token string) string {
 		return line
 	}
 	return style.Sequence() + line + theme.Reset
+}
+
+func (p *Processor) wrapStyle(text, token string) string {
+	style, ok := p.Theme.Tokens[token]
+	if !ok || style.Sequence() == "" {
+		return text
+	}
+	return style.Sequence() + text + theme.Reset
 }

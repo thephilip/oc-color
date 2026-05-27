@@ -55,41 +55,31 @@ each other but are ordered so the plugin is usable after every phase.
 
 ---
 
-### Phase 1 — Foundation (current state → v0.2)
+### Phase 1 — Foundation (v0.2) ✅
 
 **Goal:** A working, installable plugin with basic colorization and config.
 
-- [ ] **Initialize Go module correctly**
-  - Choose module path (`github.com/<your-org>/oc-color`)
-  - Add `go.sum`, pin dependencies
+- [x] **Initialize Go module correctly**
+  - Module path `github.com/thephilip/oc-color`
+  - `go.mod` + `go.sum` with pinned deps
 
-- [ ] **Add YAML config system**
+- [x] **Add YAML config system**
   - Search paths: `$XDG_CONFIG_HOME/oc-color/config.yaml` → `~/.config/oc-color/config.yaml` → built-in defaults
-  - Config sections:
-    ```yaml
-    color: always       # always | never | auto
-    theme: dracula      # name or path to custom theme file
-    highlight:
-      json: true        # enable JSON syntax highlighting on -o json output
-      yaml: true        # enable YAML syntax highlighting on -o yaml output
-    ```
+  - Config: `color: auto\|always\|never`, `theme: <name>`
 
-- [ ] **TTY detection**
+- [x] **TTY detection**
   - `--color=auto` (default): colorize only when stdout is a terminal
-  - `--color=always`: force colors even when piped
-  - `--color=never` / `--no-color`: disable
-  - Use `golang.org/x/term` for portable detection
+  - `--color=always` / `--color=never` / `--no-color`
+  - Uses `golang.org/x/term`
 
-- [ ] **Expanded status map** (covers ~30+ statuses)
-  - Pod statuses, OLM statuses, build statuses, deployment statuses
-  - All mapped to themed colors
+- [x] **Expanded status map** (30+ statuses)
+  - Pod, build, deployment, OLM statuses mapped to themed tokens
 
-- [ ] **Dracula theme** as the default built-in theme
-  - Define colors in a `theme` struct, loadable from config
+- [x] **Dracula theme** as the default built-in theme
+  - Truecolor ANSI rendering via hex color codes
 
-- [ ] **Self-test mode**
-  - `oc color --dry-run` — runs the pipeline against a sample output and prints it
-  - Useful for validating themes and spotting regressions
+- [x] **Self-test mode**
+  - `oc color --dry-run` processes sample output through the pipeline
 
 **Deliverable:** `oc color get pods` is noticeably prettier. Config file works. No color bleed when piping.
 
@@ -99,23 +89,28 @@ each other but are ordered so the plugin is usable after every phase.
 
 **Goal:** `oc get` tabular output looks structured and professional.
 
-- [ ] **Detect tabular output**
-  - Heuristic: multi-line output with consistent column spacing, first line is a header
-  - Commands: `oc get <resource>`, `oc get <resource> -w`
+- [x] **Header styling**
+  - Bold + underline + accent color (theme-driven, Dracula purple)
+  - Matches `^[A-Z][A-Z\s/]+$` header pattern
 
-- [ ] **Header styling**
-  - Bold + underline + colored
-  - Detect column boundaries
+- [x] **Word-level status colorization**
+  - Instead of coloring the entire line, only the matched status word is colored
+  - Ready column N/M patterns: green when equal, yellow when zero
 
-- [ ] **Column styling**
-  - Alternate row shading (subtle, optional)
-  - Status column gets special color treatment
-  - Age/human-readable durations get dimmer color
+- [x] **Age/duration dimming**
+  - Values like `12h`, `5m`, `30d`, `30s` rendered in dim theme color
+  - Pattern: `\b[1-9]\d*[smhd]\b` (positive durations only, avoids ANSI reset false-positives)
 
-- [ ] **Divider / separator lines**
-  - Lightweight horizontal rules between sections (e.g., after `oc describe` headings)
+- [ ] **Column-aware table parsing** (deferred — needs robust boundary detection)
+  - Column boundaries from header don't match data rows (oc pads to widest value)
+  - Would need proper width detection or whitespace-field parsing
+  - Blocking: restart count coloring, column-specific styling
 
-**Deliverable:** `oc color get pods`, `oc color get nodes`, `oc color get all` look clean.
+- [ ] **Alternate row shading** (deferred — Phase 2 scope trimmed)
+
+- [ ] **Divider / separator lines** (deferred — belongs with `oc describe` in Phase 4)
+
+**Deliverable:** `oc color get pods` — headers styled, status words individually colored, ages dimmed.
 
 ---
 
