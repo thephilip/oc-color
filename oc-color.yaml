@@ -1,0 +1,21 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: oc-color
+spec:
+  version: "0.1.0"
+  homepage: "https://github.com/thephilip/oc-color"
+  shortDescription: "Colorize and syntax-highlight oc command output."
+  description: |-
+    oc-color is a plugin for the OpenShift CLI (oc) tool that wraps the oc binary,
+    intercepting its output and injecting ANSI color codes for improved readability.
+    It supports highlighting key status words (e.g., Running, Pending, Error) and can be
+    extended to support advanced syntax highlighting.
+  platforms:
+    - selector:
+        matchExpressions:
+          - { key: "os", operator: "In", values: ["linux", "darwin", "windows"] }
+      uri: "https://github.com/thephilip/oc-color/releases/download/v0.1.0/oc-color_{os}_{arch}.tar.gz"
+      sha256: "<insert-sha256-here>"
+      bin: "oc-color"
+
