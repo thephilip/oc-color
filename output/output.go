@@ -79,6 +79,14 @@ func (p *Processor) Process(output string) string {
 		return output
 	}
 
+	trimmed := strings.TrimSpace(output)
+	if looksLikeJSON(trimmed) {
+		return highlightJSON(output, p.Theme)
+	}
+	if looksLikeYAML(trimmed) {
+		return highlightYAML(output, p.Theme)
+	}
+
 	lines := strings.SplitAfter(output, "\n")
 	var buf strings.Builder
 
@@ -87,6 +95,14 @@ func (p *Processor) Process(output string) string {
 	}
 
 	return buf.String()
+}
+
+func wrapWithTheme(text, token string, th theme.Theme) string {
+	style, ok := th.Tokens[token]
+	if !ok || style.Sequence() == "" {
+		return text
+	}
+	return style.Sequence() + text + theme.Reset
 }
 
 func (p *Processor) processLine(line string) string {
@@ -129,9 +145,5 @@ func (p *Processor) applyStyle(line, token string) string {
 }
 
 func (p *Processor) wrapStyle(text, token string) string {
-	style, ok := p.Theme.Tokens[token]
-	if !ok || style.Sequence() == "" {
-		return text
-	}
-	return style.Sequence() + text + theme.Reset
+	return wrapWithTheme(text, token, p.Theme)
 }

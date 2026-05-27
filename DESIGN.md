@@ -114,22 +114,36 @@ each other but are ordered so the plugin is usable after every phase.
 
 ---
 
-### Phase 3 — JSON / YAML Syntax Highlighting (v0.4)
+### Phase 3 — JSON / YAML Syntax Highlighting (v0.4) ✅
 
 **Goal:** `oc color get pod -o json` and `-o yaml` output is syntax-highlighted.
 
-- [ ] **JSON tokenizer** (built-in, no external dep)
-  - Walk Go's `encoding/json` Decoder tokens
-  - Color by token type: keys→yellow, strings→green, numbers→purple, booleans→cyan, null→dim
-  - Handle nested objects, arrays, indentation
+- [x] **JSON tokenizer** (built-in, no external dep)
+  - Character-by-character tokenizer with state tracking
+  - Keys → yellow (`key`), strings → green (`success`), numbers → purple (`accent`)
+  - Booleans → cyan (`info`), null → dim (`dim`), delimiters → pink (`pink`)
+  - Detects keys by peeking for `:` after the string
+  - Handles escape sequences, scientific notation in numbers
 
-- [ ] **YAML tokenizer**
-  - Lightweight line-by-line tokenization (no full parser needed)
-  - Color keys, values, comments, anchors, directives
+- [x] **YAML tokenizer**
+  - Line-by-line processing with leading whitespace preservation
+  - `---`/`...` document delimiters → pink
+  - Keys (word before `:`) → yellow
+  - `-` list markers → pink
+  - Quoted strings, booleans, null, numbers → respective colors
+  - Comments (`#`) → dim
 
-- [ ] **Respect `--color` setting** in the highlighter
+- [x] **Output type detection**
+  - `Processor.Process()` checks output prefix before line-by-line processing
+  - JSON: output starts with `{` or `[`
+  - YAML: output starts with `---`
+  - Otherwise: falls through to standard tabular/text colorization
 
-**Deliverable:** `oc color get pod my-pod -o json` and `-o yaml` are syntax highlighted.
+- [ ] **Config-controlled highlighting** (`highlight.json`, `highlight.yaml` in config)
+  - Currently always-on for detected types
+  - Add config toggle in future iteration
+
+**Deliverable:** `oc color get pod my-pod -o json` and `-o yaml` are syntax-highlighted.
 
 ---
 

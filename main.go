@@ -21,7 +21,7 @@ type flags struct {
 	showHelp  bool
 }
 
-const version = "0.3.0"
+const version = "0.4.0"
 
 func main() {
 	flags, args := parseFlags(os.Args[1:])
