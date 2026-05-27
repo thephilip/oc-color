@@ -86,6 +86,9 @@ func (p *Processor) Process(output string) string {
 	if looksLikeYAML(trimmed) {
 		return highlightYAML(output, p.Theme)
 	}
+	if looksLikeDescribe(trimmed) {
+		return p.processDescribe(output)
+	}
 
 	lines := strings.SplitAfter(output, "\n")
 	var buf strings.Builder

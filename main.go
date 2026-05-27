@@ -14,14 +14,16 @@ import (
 )
 
 type flags struct {
-	colorMode string
-	themeName string
-	dryRun    bool
-	showVer   bool
-	showHelp  bool
+	colorMode     string
+	themeName     string
+	dryRun        bool
+	showVer       bool
+	showHelp      bool
+	listThemes    bool
+	validateTheme string
 }
 
-const version = "0.4.0"
+const version = "0.5.0"
 
 func main() {
 	flags, args := parseFlags(os.Args[1:])
@@ -33,6 +35,23 @@ func main() {
 
 	if flags.showHelp {
 		printHelp()
+		return
+	}
+
+	if flags.listThemes {
+		fmt.Println("Available themes:")
+		for _, name := range theme.Names() {
+			fmt.Printf("  %s\n", name)
+		}
+		return
+	}
+
+	if flags.validateTheme != "" {
+		if err := theme.Validate(flags.validateTheme); err != nil {
+			fmt.Fprintf(os.Stderr, "error: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Println("theme is valid")
 		return
 	}
 
@@ -92,6 +111,10 @@ func parseFlags(args []string) (flags, []string) {
 			f.showVer = true
 		case arg == "--help" || arg == "-h":
 			f.showHelp = true
+		case arg == "--list-themes":
+			f.listThemes = true
+		case arg == "--validate-theme" || strings.HasPrefix(arg, "--validate-theme="):
+			f.validateTheme = flagValue(arg, "--validate-theme", &i, args)
 		default:
 			remaining = append(remaining, arg)
 		}
@@ -135,20 +158,26 @@ Usage:
   oc color [flags] -- <oc-args>
 
 Flags:
-  --color <mode>    Color mode: always, never, auto (default: auto)
-  --no-color        Shorthand for --color=never
-  --theme <name>    Theme name (default: dracula)
-  --dry-run         Process sample output to preview colors
-  --version         Print version
-  --help, -h        Show this help
+  --color <mode>       Color mode: always, never, auto (default: auto)
+  --no-color           Shorthand for --color=never
+  --theme <name>       Theme name (default: dracula)
+  --list-themes        List available themes
+  --validate-theme <path>  Validate a theme YAML file
+  --dry-run            Process sample output to preview colors
+  --version            Print version
+  --help, -h           Show this help
 
 Examples:
   oc color get pods
   oc color --color=always get pods | less -R
   oc color --theme dracula get pods -o json
+  oc color --theme nord get pods
+  oc color --list-themes
+  oc color --validate-theme ~/.config/oc-color/themes/nord.yaml
   oc color --dry-run
 
 Config: ~/.config/oc-color/config.yaml
+Themes:  ~/.config/oc-color/themes/*.yaml
 `)
 }
 

@@ -33,6 +33,29 @@ Define in `.opencode/agents/`. Dispatch with `opencode run --agent <name>`
 - All auth/PII/payment code gets security review
 - No destructive filesystem ops, pushes to protected branches, or new deps without approval
 
+## Project Status
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Foundation — config, TTY detection, status map, Dracula theme, dry-run | ✅ |
+| 2 | Table styling — headers, word-level status colorization, age dimming | ✅ |
+| 3 | JSON & YAML syntax highlighting (built-in tokenizers) | ✅ |
+| 4 | `oc describe` beautification — section headers, key-value, events, conditions | ✅ |
+| 5 | Theme system — custom YAML themes, `--list-themes`, `--validate-theme`, terminal color detection | ✅ |
+| 6 | Polish — shell completion, `--watch`, performance, help | ⬜ |
+
+### Quick Reference
+
+```bash
+go build -o oc-color . && ./oc-color --dry-run
+go test ./...
+./oc-color --list-themes
+./oc-color --validate-theme ~/.config/oc-color/themes/mytheme.yaml
+./oc-color --theme nord get pods
+```
+
+Custom themes go in `~/.config/oc-color/themes/<name>.yaml` (or `$XDG_CONFIG_HOME/oc-color/themes/<name>.yaml`). Supports both string shorthand (`bold+red`) and structured YAML (`color: red, bold: true`).
+
 ---
 
 
