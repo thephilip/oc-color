@@ -22,6 +22,7 @@ type flags struct {
 	listThemes      bool
 	validateTheme   string
 	completionShell string
+	showUpgrade     bool
 }
 
 const version = "0.5.0"
@@ -41,6 +42,11 @@ func main() {
 
 	if flags.completionShell != "" {
 		printCompletion(flags.completionShell)
+		return
+	}
+
+	if flags.showUpgrade {
+		printUpgrade()
 		return
 	}
 
@@ -127,6 +133,8 @@ func parseFlags(args []string) (flags, []string) {
 				i++
 				f.completionShell = args[i]
 			}
+		case arg == "upgrade":
+			f.showUpgrade = true
 		default:
 			remaining = append(remaining, arg)
 		}
@@ -169,6 +177,7 @@ func printHelp() {
 Usage:
   oc color [flags] -- <oc-args>
   oc color completion <bash|zsh|fish>
+  oc color upgrade
 
 Flags:
   --color <mode>       Color mode: always, never, auto (default: auto)
@@ -196,6 +205,16 @@ Examples:
 
 Config: ~/.config/oc-color/config.yaml
 Themes:  ~/.config/oc-color/themes/*.yaml
+`)
+}
+
+func printUpgrade() {
+	fmt.Print(`To upgrade oc-color to the latest version:
+
+  go install github.com/thephilip/oc-color@latest
+
+This fetches the latest commit, rebuilds the binary into ~/go/bin/oc-color,
+and replaces the current version.
 `)
 }
 

@@ -46,7 +46,7 @@ func printBashCompletion() {
     if [[ $cur == -* ]]; then
         COMPREPLY=($(compgen -W '--color --no-color --theme --list-themes --validate-theme --dry-run --version --help' -- "$cur"))
     else
-        COMPREPLY=($(compgen -W 'completion' -- "$cur"))
+        COMPREPLY=($(compgen -W 'completion upgrade' -- "$cur"))
     fi
 } && complete -F _oc-color oc-color
 `)
@@ -73,7 +73,7 @@ _oc-color() {
 
     case $state in
         subcommand)
-            _values 'subcommand' completion
+            _values 'subcommand' completion upgrade
             ;;
         args)
             case $words[1] in
@@ -98,7 +98,7 @@ complete -c oc-color -l validate-theme -r -d "Validate a theme file"
 complete -c oc-color -l dry-run -d "Preview colors with sample output"
 complete -c oc-color -l version -d "Print version"
 complete -c oc-color -l help -d "Show help"
-complete -c oc-color -n "not __fish_seen_subcommand_from completion" -xa completion -d "Generate completion script"
+complete -c oc-color -n "not __fish_seen_subcommand_from completion upgrade" -xa "completion upgrade" -d "Subcommand"
 complete -c oc-color -n "__fish_seen_subcommand_from completion" -xa "bash zsh fish" -d "Shell type"
 `)
 }
