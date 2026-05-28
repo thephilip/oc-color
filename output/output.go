@@ -209,7 +209,7 @@ func (p *Processor) processTabularLine(line string) string {
 
 		var styled string
 		if i == statusIdx && trimmed != "" {
-			styled = strings.TrimRightFunc(p.colorizeStatusWords(body), isSpace)
+			styled = p.colorizeStatusWords(body)
 		} else if i == ageIdx && trimmed != "" {
 			styled = agePattern.ReplaceAllStringFunc(body, func(m string) string {
 				return p.wrapStyle(m, "dim")
@@ -263,8 +263,4 @@ func (p *Processor) applyStyle(line, token string) string {
 
 func (p *Processor) wrapStyle(text, token string) string {
 	return wrapWithTheme(text, token, p.Theme)
-}
-
-func isSpace(r rune) bool {
-	return r == ' ' || r == '\t'
 }

@@ -25,7 +25,7 @@ type flags struct {
 	showUpgrade     bool
 }
 
-const version = "0.6.0"
+const version = "0.6.1"
 
 func main() {
 	flags, args := parseFlags(os.Args[1:])
