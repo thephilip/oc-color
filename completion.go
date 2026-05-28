@@ -56,24 +56,36 @@ func printZshCompletion() {
 	fmt.Print(`#compdef oc-color
 
 _oc-color() {
-    local -a flags
-    flags=(
-        '--color[Color mode]:mode:(always never auto)'
-        '--no-color[Disable color]'
-        '--theme[Theme name]:theme:(dracula)'
-        '--list-themes[List available themes]'
-        '--validate-theme[Validate a theme file]:file:_files'
-        '--dry-run[Preview colors with sample output]'
-        '--version[Print version]'
-        '--help[Show help]'
-    )
+    local context state state_descr line
+    typeset -A opt_args
 
     _arguments \
-        $flags \
-        'completion:shell:(bash zsh fish)'
+        '--color[Color mode]:mode:(always never auto)' \
+        '--no-color[Disable color]' \
+        '--theme[Theme name]:theme:(dracula)' \
+        '--list-themes[List available themes]' \
+        '--validate-theme[Validate a theme file]:file:_files' \
+        '--dry-run[Preview colors with sample output]' \
+        '--version[Print version]' \
+        '--help[Show help]' \
+        '1: :->subcommand' \
+        '*: :->args'
+
+    case $state in
+        subcommand)
+            _values 'subcommand' completion
+            ;;
+        args)
+            case $words[1] in
+                completion)
+                    _values 'shell' bash zsh fish
+                    ;;
+            esac
+            ;;
+    esac
 }
 
-_oc-color
+_oc-color "$@"
 `)
 }
 
