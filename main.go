@@ -14,13 +14,14 @@ import (
 )
 
 type flags struct {
-	colorMode     string
-	themeName     string
-	dryRun        bool
-	showVer       bool
-	showHelp      bool
-	listThemes    bool
-	validateTheme string
+	colorMode       string
+	themeName       string
+	dryRun          bool
+	showVer         bool
+	showHelp        bool
+	listThemes      bool
+	validateTheme   string
+	completionShell string
 }
 
 const version = "0.5.0"
@@ -35,6 +36,11 @@ func main() {
 
 	if flags.showHelp {
 		printHelp()
+		return
+	}
+
+	if flags.completionShell != "" {
+		printCompletion(flags.completionShell)
 		return
 	}
 
@@ -115,6 +121,12 @@ func parseFlags(args []string) (flags, []string) {
 			f.listThemes = true
 		case arg == "--validate-theme" || strings.HasPrefix(arg, "--validate-theme="):
 			f.validateTheme = flagValue(arg, "--validate-theme", &i, args)
+		case arg == "completion":
+			f.completionShell = "bash"
+			if i+1 < len(args) && !strings.HasPrefix(args[i+1], "-") {
+				i++
+				f.completionShell = args[i]
+			}
 		default:
 			remaining = append(remaining, arg)
 		}
@@ -156,6 +168,7 @@ func printHelp() {
 
 Usage:
   oc color [flags] -- <oc-args>
+  oc color completion <bash|zsh|fish>
 
 Flags:
   --color <mode>       Color mode: always, never, auto (default: auto)
@@ -175,6 +188,11 @@ Examples:
   oc color --list-themes
   oc color --validate-theme ~/.config/oc-color/themes/nord.yaml
   oc color --dry-run
+
+  # Generate shell completion scripts:
+  oc color completion bash > /etc/bash_completion.d/oc-color
+  oc color completion zsh  > /usr/share/zsh/site-functions/_oc-color
+  oc color completion fish > ~/.config/fish/completions/oc-color.fish
 
 Config: ~/.config/oc-color/config.yaml
 Themes:  ~/.config/oc-color/themes/*.yaml

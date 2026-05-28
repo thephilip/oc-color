@@ -7,9 +7,9 @@ Colorize and syntax-highlight `oc` command output. Think `diff` → `colordiff`,
 
 ## Installation
 
-### Krew plugin (recommended)
+### Krew plugin
 
-Requires [krew](https://krew.sigs.k8s.io/) plugin manager:
+Requires [krew](https://krew.sigs.k8s.io/) plugin manager. *Pending — krew submission not yet completed.*
 
 ```bash
 kubectl krew install oc-color
@@ -66,6 +66,7 @@ oc color --dry-run
 | `--dry-run` | Process sample output to preview colors |
 | `--version` | Print version |
 | `--help`, `-h` | Show help |
+| `completion <shell>` | Generate shell completion script (`bash`, `zsh`, `fish`) |
 
 ## Configuration
 
@@ -133,6 +134,11 @@ oc color --list-themes
 
 # Preview color output without a cluster
 oc color --dry-run
+
+# Generate shell completion scripts
+oc color completion bash > /etc/bash_completion.d/oc-color
+oc color completion zsh > /usr/share/zsh/site-functions/_oc-color
+oc color completion fish > ~/.config/fish/completions/oc-color.fish
 ```
 
 ## Development
