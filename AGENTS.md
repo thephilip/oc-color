@@ -25,6 +25,15 @@ Define in `.opencode/agents/`. Dispatch with `opencode run --agent <name>`
 4. code-reviewer / security-auditor reviews
 5. orchestrator debriefs user with summary + approval requests
 
+## Versioning
+
+Semantic versioning in `main.go` version constant:
+- **Patch** (0.6.1): bug/security fixes
+- **Minor** (0.7.0): feature additions
+- **Major** (1.0.0): breaking changes
+
+Version is bumped with every push.
+
 ## Coding Conventions
 
 - TypeScript over JS, typed function components, CSS variables, mobile-first responsive
@@ -42,7 +51,7 @@ Define in `.opencode/agents/`. Dispatch with `opencode run --agent <name>`
 | 3 | JSON & YAML syntax highlighting (built-in tokenizers) | ✅ |
 | 4 | `oc describe` beautification — section headers, key-value, events, conditions | ✅ |
 | 5 | Theme system — custom YAML themes, `--list-themes`, `--validate-theme`, terminal color detection | ✅ |
-| 6 | Polish — shell completion, `--watch`, performance, help | ⬜ |
+| 6 | Polish — shell completion, column-aware table parsing, `--watch`, performance | 🔶 |
 
 ### Quick Reference
 
