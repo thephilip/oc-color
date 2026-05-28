@@ -26,3 +26,6 @@ Thumbs.db
 
 # Dependency directories
 vendor/
+
+# OpenCode agent instructions
+AGENTS.md
