@@ -240,13 +240,16 @@ Themes:  ~/.config/oc-color/themes/*.yaml
 }
 
 func printUpgrade() {
-	fmt.Print(`To upgrade oc-color to the latest version:
-
-  go install github.com/thephilip/oc-color@latest
-
-This fetches the latest commit, rebuilds the binary into ~/go/bin/oc-color,
-and replaces the current version.
-`)
+	fmt.Println("Upgrading oc-color to the latest version...")
+	cmd := exec.Command("go", "install", "github.com/thephilip/oc-color@latest")
+	cmd.Env = append(os.Environ(), "GOPROXY=direct")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Fprintf(os.Stderr, "error: upgrade failed: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Println("Upgrade complete.")
 }
 
 func dryRun(th theme.Theme, useColor bool) {
