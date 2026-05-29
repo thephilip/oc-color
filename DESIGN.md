@@ -106,7 +106,7 @@ each other but are ordered so the plugin is usable after every phase.
   - Would need proper width detection or whitespace-field parsing
   - Blocking: restart count coloring, column-specific styling
 
-- [ ] **Alternate row shading** (deferred — Phase 2 scope trimmed)
+- [x] **Alternate row shading** (zebra-striping via shade token, deferred from Phase 2)
 
 - [ ] **Divider / separator lines** (deferred — belongs with `oc describe` in Phase 4)
 

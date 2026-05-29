@@ -16,6 +16,7 @@ type Processor struct {
 	Theme   theme.Theme
 	Colour  bool
 	columns []column
+	lineNum int
 }
 
 type statusEntry struct {
@@ -106,6 +107,7 @@ func (p *Processor) Process(output string) string {
 		return output
 	}
 
+	p.lineNum = 0
 	trimmed := strings.TrimSpace(output)
 	if looksLikeJSON(trimmed) {
 		return highlightJSON(output, p.Theme)
@@ -147,17 +149,27 @@ func (p *Processor) processLine(line string) string {
 
 	if headerLine.MatchString(trimmed) {
 		p.parseColumns(line)
+		p.lineNum = 0
 		return p.applyStyle(line, "header")
 	}
 
+	p.lineNum++
+	var result string
 	if len(p.columns) >= 2 {
-		return p.processTabularLine(line)
+		result = p.processTabularLine(line)
+	} else {
+		result = p.colorizeStatusWords(line)
+		result = agePattern.ReplaceAllStringFunc(result, func(match string) string {
+			return p.wrapStyle(match, "dim")
+		})
 	}
 
-	result := p.colorizeStatusWords(line)
-	result = agePattern.ReplaceAllStringFunc(result, func(match string) string {
-		return p.wrapStyle(match, "dim")
-	})
+	if p.lineNum%2 == 0 {
+		if shade := p.Theme.Tokens["shade"].BackgroundSequence(); shade != "" {
+			result = strings.ReplaceAll(result, theme.Reset, theme.Reset+shade)
+			result = shade + result
+		}
+	}
 	return result
 }
 

@@ -26,7 +26,7 @@ type flags struct {
 	watchMode       bool
 }
 
-const version = "0.7.0"
+const version = "0.8.0"
 
 func main() {
 	flags, args := parseFlags(os.Args[1:])

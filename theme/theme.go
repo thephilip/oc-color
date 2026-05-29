@@ -12,11 +12,12 @@ import (
 )
 
 type TokenStyle struct {
-	Color     string `yaml:"color"`
-	Bold      bool   `yaml:"bold"`
-	Dim       bool   `yaml:"dim"`
-	Italic    bool   `yaml:"italic"`
-	Underline bool   `yaml:"underline"`
+	Color      string `yaml:"color"`
+	Background string `yaml:"background"`
+	Bold       bool   `yaml:"bold"`
+	Dim        bool   `yaml:"dim"`
+	Italic     bool   `yaml:"italic"`
+	Underline  bool   `yaml:"underline"`
 }
 
 type Theme struct {
@@ -236,6 +237,24 @@ func (ts TokenStyle) Sequence() string {
 	return "\033[" + strings.Join(parts, ";") + "m"
 }
 
+func (ts TokenStyle) BackgroundSequence() string {
+	if ts.Background == "" {
+		return ""
+	}
+	switch ColorCapability {
+	case CapTruecolor, Cap256:
+		if strings.HasPrefix(ts.Background, "#") {
+			return "\033[" + hexTruecolor(ts.Background, false) + "m"
+		}
+		return "\033[" + namedColor(ts.Background, false) + "m"
+	default:
+		if strings.HasPrefix(ts.Background, "#") {
+			return "\033[" + hexToNamed(ts.Background, false) + "m"
+		}
+		return "\033[" + namedColor(ts.Background, false) + "m"
+	}
+}
+
 const Reset = "\033[0m"
 
 func hexTruecolor(hex string, fg bool) string {
@@ -336,7 +355,16 @@ func isNamedColor(name string) bool {
 }
 
 func namedColor(name string, fg bool) string {
-	return resolveNamed(name)
+	c := resolveNamed(name)
+	if !fg {
+		if c == "39" {
+			return "49"
+		}
+		if len(c) == 2 && c[0] == '3' {
+			return "4" + string(c[1])
+		}
+	}
+	return c
 }
 
 func dracula() Theme {
@@ -351,6 +379,7 @@ func dracula() Theme {
 			"pink":    {Color: "#FF79C6"},
 			"orange":  {Color: "#FFB86C"},
 			"dim":     {Color: "#6272A4"},
+			"shade":   {Background: "#2E3040"},
 			"header":  {Color: "#BD93F9", Bold: true, Underline: true},
 			"key":     {Color: "#F1FA8C"},
 			"value":   {Color: "#F8F8F2"},
