@@ -219,7 +219,7 @@ each other but are ordered so the plugin is usable after every phase.
 
 - [ ] **Performance optimization** — memoize regex compilation, buffer management
 - [ ] **Shell completion** — `oc color completion [bash|zsh|fish]`
-- [ ] **`--watch` support** — clean redraw on `oc get pods -w` (no scroll junk)
+- [x] **`--watch` support** — clean redraw on `oc get pods -w` (no scroll junk)
 - [ ] **`oc color --version`** — prints version + git commit
 - [ ] **`oc color --help`** — well-structured help output
 - [ ] **`oc color --dry-run` with sample data** — show all features without a real cluster

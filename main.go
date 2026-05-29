@@ -23,9 +23,10 @@ type flags struct {
 	validateTheme   string
 	completionShell string
 	showUpgrade     bool
+	watchMode       bool
 }
 
-const version = "0.6.1"
+const version = "0.7.0"
 
 func main() {
 	flags, args := parseFlags(os.Args[1:])
@@ -87,14 +88,39 @@ func main() {
 		return
 	}
 
+	proc := output.Processor{Theme: th, Colour: useColor}
+
+	if flags.watchMode || isWatchMode(args) {
+		if !useColor {
+			cmd := exec.Command("oc", args...)
+			var stdout, stderr bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
+			err := cmd.Run()
+			fmt.Print(stdout.String())
+			if err != nil {
+				fmt.Fprint(os.Stderr, stderr.String())
+				os.Exit(1)
+			}
+			return
+		}
+		watchArgs := args
+		if flags.watchMode {
+			watchArgs = append([]string{"-w"}, args...)
+		}
+		err := runWatch(watchArgs, &proc)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		return
+	}
+
 	cmd := exec.Command("oc", args...)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
 	err = cmd.Run()
-
-	proc := output.Processor{Theme: th, Colour: useColor}
 
 	if err != nil {
 		fmt.Fprint(os.Stderr, proc.Process(stderr.String()))
@@ -127,6 +153,8 @@ func parseFlags(args []string) (flags, []string) {
 			f.listThemes = true
 		case arg == "--validate-theme" || strings.HasPrefix(arg, "--validate-theme="):
 			f.validateTheme = flagValue(arg, "--validate-theme", &i, args)
+		case arg == "--watch":
+			f.watchMode = true
 		case arg == "completion":
 			f.completionShell = "bash"
 			if i+1 < len(args) && !strings.HasPrefix(args[i+1], "-") {
@@ -185,12 +213,15 @@ Flags:
   --theme <name>       Theme name (default: dracula)
   --list-themes        List available themes
   --validate-theme <path>  Validate a theme YAML file
+  --watch              Watch mode (equivalent to oc -w). Clean in-place redraw.
   --dry-run            Process sample output to preview colors
   --version            Print version
   --help, -h           Show this help
 
 Examples:
   oc color get pods
+  oc color get pods -w
+  oc color --watch get pods
   oc color --color=always get pods | less -R
   oc color --theme dracula get pods -o json
   oc color --theme nord get pods
