@@ -2,9 +2,7 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -34,6 +32,7 @@ func runWatch(args []string, proc *output.Processor) error {
 	if err != nil {
 		return err
 	}
+	cmd.Stderr = os.Stderr
 	if err := cmd.Start(); err != nil {
 		return err
 	}
@@ -45,12 +44,6 @@ func runWatch(args []string, proc *output.Processor) error {
 			lineCh <- sc.Text()
 		}
 		close(lineCh)
-	}()
-
-	stderr, _ := cmd.StderrPipe()
-	var stderrBuf bytes.Buffer
-	go func() {
-		io.Copy(&stderrBuf, stderr)
 	}()
 
 	isTerm := term.IsTerminal(int(os.Stdout.Fd()))
