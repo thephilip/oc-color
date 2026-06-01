@@ -89,7 +89,7 @@ func main() {
 		return
 	}
 
-	proc := output.Processor{Theme: th, Colour: useColor}
+	proc := output.Processor{Theme: th, Colour: useColor, Shade: true}
 
 	if flags.watchMode || isWatchMode(args) {
 		if !useColor {
@@ -273,6 +273,6 @@ default       OOM-killed-app                0/1     OOMKilled           0       
 default       terminated-job                0/1     Completed           0          6h
 `
 
-	proc := output.Processor{Theme: th, Colour: useColor}
+	proc := output.Processor{Theme: th, Colour: useColor, Shade: true}
 	fmt.Print(proc.Process(sample))
 }

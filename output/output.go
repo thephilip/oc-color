@@ -15,6 +15,7 @@ type column struct {
 type Processor struct {
 	Theme   theme.Theme
 	Colour  bool
+	Shade   bool
 	columns []column
 	lineNum int
 }
@@ -164,10 +165,15 @@ func (p *Processor) processLine(line string) string {
 		})
 	}
 
-	if p.lineNum%2 == 0 {
+	if p.Shade && p.lineNum%2 == 0 {
 		if shade := p.Theme.Tokens["shade"].BackgroundSequence(); shade != "" {
+			nl := ""
+			if strings.HasSuffix(result, "\n") {
+				result = result[:len(result)-1]
+				nl = "\n"
+			}
 			result = strings.ReplaceAll(result, theme.Reset, theme.Reset+shade)
-			result = shade + result
+			result = shade + result + theme.Reset + nl
 		}
 	}
 	return result
