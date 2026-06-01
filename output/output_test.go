@@ -51,3 +51,14 @@ func TestShadeNotAppliedToHeader(t *testing.T) {
 		t.Errorf("even data row must be shaded, got: %q", lines[2])
 	}
 }
+
+func TestShadeResetAtLineEndTabular(t *testing.T) {
+	proc := Processor{Theme: shadeTheme(), Colour: true, Shade: true}
+	// Header resets lineNum; row1=lineNum1 (no shade), row2=lineNum2 (shade)
+	got := proc.Process("NAME   STATUS\nfoo    Running\nbar    Pending\n")
+	lines := strings.Split(got, "\n")
+	// lines[2] is the shaded row (lineNum=2, even) — must end with theme.Reset
+	if !strings.HasSuffix(lines[2], theme.Reset) {
+		t.Errorf("shaded tabular row must end with Reset before newline, got: %q", lines[2])
+	}
+}
