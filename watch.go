@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -14,6 +15,8 @@ import (
 	"github.com/thephilip/oc-color/output"
 	"golang.org/x/term"
 )
+
+var errInterrupted = errors.New("interrupted")
 
 var headerPattern = regexp.MustCompile(`^[A-Z][A-Z\s/]+$`)
 
@@ -76,7 +79,8 @@ func runWatch(args []string, proc *output.Processor) error {
 		select {
 		case <-sigCh:
 			cmd.Process.Kill()
-			return fmt.Errorf("interrupted")
+			cmd.Wait()
+			return errInterrupted
 		case line, ok := <-lineCh:
 			if !ok {
 				return cmd.Wait()
