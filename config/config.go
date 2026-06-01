@@ -10,6 +10,14 @@ import (
 type Config struct {
 	Color string `yaml:"color"`
 	Theme string `yaml:"theme"`
+	Shade *bool  `yaml:"shade,omitempty"`
+}
+
+func (c Config) ShadeEnabled() bool {
+	if c.Shade == nil {
+		return true
+	}
+	return *c.Shade
 }
 
 func Default() Config {
