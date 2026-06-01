@@ -53,7 +53,8 @@ func runWatch(args []string, proc *output.Processor) error {
 	if isTerm {
 		os.Stdout.WriteString("\033[?25l")
 		defer func() {
-			os.Stdout.WriteString("\033[?25h")
+			os.Stdout.WriteString("\033[0m")   // reset any stale color/style
+			os.Stdout.WriteString("\033[?25h") // show cursor
 			os.Stdout.WriteString("\n")
 		}()
 	}
