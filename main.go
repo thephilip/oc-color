@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -109,7 +110,7 @@ func main() {
 			watchArgs = append([]string{"-w"}, args...)
 		}
 		err := runWatch(watchArgs, &proc)
-		if err != nil {
+		if err != nil && !errors.Is(err, errInterrupted) {
 			fmt.Fprintln(os.Stderr, err)
 		}
 		return
