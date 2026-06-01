@@ -60,6 +60,7 @@ oc color --dry-run
 |------|-------------|
 | `--color <mode>` | Color mode: `always`, `never`, `auto` (default: `auto`) |
 | `--no-color` | Shorthand for `--color=never` |
+| `--no-shade` | Disable zebra-stripe row shading |
 | `--theme <name>` | Theme name (default: `dracula`) |
 | `--list-themes` | List available themes |
 | `--validate-theme <path>` | Validate a theme YAML file |
@@ -75,6 +76,7 @@ Config file at `~/.config/oc-color/config.yaml` (or `$XDG_CONFIG_HOME/oc-color/c
 ```yaml
 color: auto      # auto, always, never
 theme: dracula   # theme name
+shade: true      # set to false to disable zebra-stripe row shading
 ```
 
 ## Themes
