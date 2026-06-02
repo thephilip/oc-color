@@ -99,10 +99,18 @@ func main() {
 	colorMode := resolveColorMode(flags.colorMode, cfg.Color)
 	useColor := shouldColorize(colorMode)
 
-	th, ok := theme.Get(flags.themeName)
+	themeName := flags.themeName
+	if themeName == "" {
+		themeName = cfg.Theme
+	}
+	if themeName == "" {
+		themeName = "dracula"
+	}
+
+	th, ok := theme.Get(themeName)
 	if !ok {
 		fmt.Fprintf(os.Stderr, "error: unknown theme %q (available: %s)\n",
-			flags.themeName, strings.Join(theme.Names(), ", "))
+			themeName, strings.Join(theme.Names(), ", "))
 		os.Exit(1)
 	}
 
@@ -159,13 +167,13 @@ func main() {
 }
 
 func parseFlags(args []string) (flags, []string) {
-	f := flags{themeName: "dracula"}
+	f := flags{}
 	var noColor bool
 	fs := flag.NewFlagSet("oc-color", flag.ContinueOnError)
-	fs.StringVar(&f.colorMode,     "color",          "",        "Color mode: always, never, auto")
-	fs.BoolVar(&noColor,           "no-color",       false,     "Shorthand for --color=never")
-	fs.BoolVar(&f.noShade,         "no-shade",       false,     "Disable zebra-stripe row shading")
-	fs.StringVar(&f.themeName,     "theme",          "dracula", "Theme name")
+	fs.StringVar(&f.colorMode,     "color",   "",  "Color mode: always, never, auto")
+	fs.BoolVar(&noColor,           "no-color", false, "Shorthand for --color=never")
+	fs.BoolVar(&f.noShade,         "no-shade", false, "Disable zebra-stripe row shading")
+	fs.StringVar(&f.themeName,     "theme",   "",  "Theme name (default: dracula, or from config)")
 	fs.BoolVar(&f.dryRun,          "dry-run",        false,     "Process sample output to preview colors")
 	fs.BoolVar(&f.showVer,         "version",        false,     "Print version")
 	fs.BoolVar(&f.listThemes,      "list-themes",    false,     "List available themes")
