@@ -61,6 +61,9 @@ func main() {
 		case "upgrade":
 			printUpgrade()
 			return
+		case "themes":
+			runThemePicker()
+			return
 		}
 	}
 
@@ -203,6 +206,7 @@ Usage:
   oc color [flags] -- <oc-args>
   oc color completion <bash|zsh|fish>
   oc color upgrade
+  oc color themes
 
 Flags:
   --color <mode>       Color mode: always, never, auto (default: auto)
@@ -227,6 +231,7 @@ Examples:
   oc color --list-themes
   oc color --validate-theme ~/.config/oc-color/themes/nord.yaml
   oc color --dry-run
+  oc color themes              # interactive theme picker
 
   # Generate shell completion scripts:
   oc color completion bash > /etc/bash_completion.d/oc-color
