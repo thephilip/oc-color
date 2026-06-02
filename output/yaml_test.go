@@ -238,3 +238,15 @@ func TestHighlightYAML_FlowSequence_QuotedItems(t *testing.T) {
 		t.Errorf("quoted string inside flow sequence not colored success; got %q", got)
 	}
 }
+
+func TestHighlightYAML_FlowSequence_MultiLine(t *testing.T) {
+	th := testTheme()
+	input := "labels: [app=myapp,\n  tier=frontend]\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme("]", "pink", th)) {
+		t.Errorf("closing bracket on continuation line not colored pink; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme(",", "dim", th)) {
+		t.Errorf("comma not colored dim; got %q", got)
+	}
+}
