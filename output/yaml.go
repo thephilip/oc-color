@@ -12,7 +12,9 @@ func looksLikeYAML(output string) bool {
 }
 
 type yamlHL struct {
-	theme theme.Theme
+	theme       theme.Theme
+	blockScalar bool
+	blockIndent int
 }
 
 func highlightYAML(input string, th theme.Theme) string {
@@ -36,6 +38,16 @@ func (h *yamlHL) processLine(line string) string {
 	iLen := indentLen(trimmed)
 	indentStr := trimmed[:iLen]
 	content := trimmed[iLen:]
+
+	// Block scalar content: color as string until indentation returns to key level
+	if h.blockScalar {
+		if iLen <= h.blockIndent {
+			h.blockScalar = false
+			// fall through to normal processing
+		} else {
+			return indentStr + wrapWithTheme(content, "success", h.theme) + suffix
+		}
+	}
 
 	if content == "---" || content == "..." {
 		return indentStr + wrapWithTheme(content, "pink", h.theme) + suffix
@@ -63,7 +75,13 @@ func (h *yamlHL) processLine(line string) string {
 			valTrimmed := strings.TrimSpace(afterColon)
 			if valTrimmed != "" {
 				spaces := afterColon[:len(afterColon)-len(strings.TrimLeft(afterColon, " "))]
-				colored += spaces + h.colorizeValue(valTrimmed)
+				if isBlockScalarHeader(valTrimmed) {
+					h.blockScalar = true
+					h.blockIndent = iLen
+					colored += spaces + wrapWithTheme(valTrimmed, "dim", h.theme)
+				} else {
+					colored += spaces + h.colorizeValue(valTrimmed)
+				}
 			} else {
 				colored += afterColon
 			}
@@ -84,6 +102,22 @@ func (h *yamlHL) colorizeValue(s string) string {
 		return wrapWithTheme(trimmed, "success", h.theme)
 	}
 	return colorizeScalarValue(trimmed, h.theme)
+}
+
+// isBlockScalarHeader reports whether s is a YAML block scalar indicator:
+// | or > optionally followed by a chomping indicator (- or +) and/or
+// an indentation indicator (1-9) in either order.
+func isBlockScalarHeader(s string) bool {
+	if len(s) == 0 || (s[0] != '|' && s[0] != '>') {
+		return false
+	}
+	for i := 1; i < len(s); i++ {
+		c := s[i]
+		if c != '-' && c != '+' && (c < '1' || c > '9') {
+			return false
+		}
+	}
+	return true
 }
 
 func indentLen(s string) int {

@@ -115,3 +115,64 @@ func TestHighlightYAML_PreservesNewlines(t *testing.T) {
 		t.Errorf("newline count changed: input %d, got %d", strings.Count(input, "\n"), strings.Count(got, "\n"))
 	}
 }
+
+func TestHighlightYAML_BlockScalar_Pipe(t *testing.T) {
+	th := testTheme()
+	input := "command: |\n  echo hello\n  echo world\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme("|", "dim", th)) {
+		t.Errorf("block scalar header '|' not colored dim; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("echo hello", "success", th)) {
+		t.Errorf("block scalar content not colored success; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("echo world", "success", th)) {
+		t.Errorf("second block scalar line not colored success; got %q", got)
+	}
+}
+
+func TestHighlightYAML_BlockScalar_Fold(t *testing.T) {
+	th := testTheme()
+	input := "message: >\n  long line\n  continuation\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme(">", "dim", th)) {
+		t.Errorf("block scalar header '>' not colored dim; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("long line", "success", th)) {
+		t.Errorf("folded scalar content not colored success; got %q", got)
+	}
+}
+
+func TestHighlightYAML_BlockScalar_WithChomping(t *testing.T) {
+	th := testTheme()
+	input := "script: |-\n  set -e\n  echo done\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme("|-", "dim", th)) {
+		t.Errorf("block scalar header '|-' not colored dim; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("set -e", "success", th)) {
+		t.Errorf("block scalar content not colored success; got %q", got)
+	}
+}
+
+func TestHighlightYAML_BlockScalar_EndedByReducedIndent(t *testing.T) {
+	th := testTheme()
+	input := "data: |\n  line one\nnextKey: value\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme("nextKey", "key", th)) {
+		t.Errorf("key after block scalar not recognized as key; got %q", got)
+	}
+}
+
+func TestHighlightYAML_BlockScalar_BlankLineInside(t *testing.T) {
+	th := testTheme()
+	// A blank line inside a block scalar must not end the scalar
+	input := "data: |\n  line one\n\n  line two\nnextKey: val\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme("line two", "success", th)) {
+		t.Errorf("line after blank inside block scalar not colored success; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("nextKey", "key", th)) {
+		t.Errorf("key after block scalar not recognized; got %q", got)
+	}
+}
