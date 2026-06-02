@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -44,5 +45,21 @@ func TestParseFlagsWatchPassthrough(t *testing.T) {
 		if remaining[i] != v {
 			t.Errorf("remaining[%d]: want %q, got %q", i, v, remaining[i])
 		}
+	}
+}
+
+func TestGoInstalled(t *testing.T) {
+	found := goInstalled(func(name string) (string, error) {
+		return "/usr/local/go/bin/go", nil
+	})
+	if !found {
+		t.Error("goInstalled should return true when lookPath succeeds")
+	}
+
+	notFound := goInstalled(func(name string) (string, error) {
+		return "", fmt.Errorf("executable file not found in $PATH")
+	})
+	if notFound {
+		t.Error("goInstalled should return false when lookPath fails")
 	}
 }
