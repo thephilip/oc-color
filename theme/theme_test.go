@@ -198,7 +198,6 @@ tokens:
 }
 
 func TestLoadCustomTheme(t *testing.T) {
-	// Set up custom themes dir
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	themesDir := filepath.Join(home, ".config", "oc-color", "themes")
@@ -206,7 +205,7 @@ func TestLoadCustomTheme(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	content := `name: nord
+	content := `name: mytheme
 tokens:
   success: green
   warning: yellow
@@ -217,16 +216,16 @@ tokens:
   header: bold+blue+underline
   key: yellow
 `
-	if err := os.WriteFile(filepath.Join(themesDir, "nord.yaml"), []byte(content), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(themesDir, "mytheme.yaml"), []byte(content), 0644); err != nil {
 		t.Fatal(err)
 	}
 
-	th, ok := Get("nord")
+	th, ok := Get("mytheme")
 	if !ok {
-		t.Fatal("expected to find nord theme")
+		t.Fatal("expected to find mytheme custom theme")
 	}
-	if th.Name != "nord" {
-		t.Errorf("expected name 'nord', got %q", th.Name)
+	if th.Name != "mytheme" {
+		t.Errorf("expected name 'mytheme', got %q", th.Name)
 	}
 }
 
@@ -238,7 +237,7 @@ func TestNamesIncludesCustom(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	content := `name: nord
+	content := `name: mytheme
 tokens:
   success: green
   warning: yellow
@@ -249,20 +248,55 @@ tokens:
   header: bold+blue+underline
   key: yellow
 `
-	if err := os.WriteFile(filepath.Join(themesDir, "nord.yaml"), []byte(content), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(themesDir, "mytheme.yaml"), []byte(content), 0644); err != nil {
 		t.Fatal(err)
 	}
 
 	names := Names()
 	found := false
 	for _, n := range names {
-		if n == "nord" {
+		if n == "mytheme" {
 			found = true
 			break
 		}
 	}
 	if !found {
-		t.Errorf("expected 'nord' in Names() = %v", names)
+		t.Errorf("expected 'mytheme' in Names() = %v", names)
+	}
+}
+
+func testBuiltinTheme(t *testing.T, name string) {
+	t.Helper()
+	th, ok := Get(name)
+	if !ok {
+		t.Fatalf("%s theme not found", name)
+	}
+	required := []string{"success", "warning", "error", "info", "accent", "dim", "header", "key"}
+	for _, tok := range required {
+		if _, exists := th.Tokens[tok]; !exists {
+			t.Errorf("%s: missing required token %q", name, tok)
+		}
+	}
+}
+
+func TestNordTheme(t *testing.T)        { testBuiltinTheme(t, "nord") }
+func TestOneDarkTheme(t *testing.T)     { testBuiltinTheme(t, "one-dark") }
+func TestGruvboxTheme(t *testing.T)     { testBuiltinTheme(t, "gruvbox") }
+func TestCatppuccinTheme(t *testing.T)  { testBuiltinTheme(t, "catppuccin") }
+func TestTokyoNightTheme(t *testing.T)  { testBuiltinTheme(t, "tokyo-night") }
+func TestSolarizedTheme(t *testing.T)   { testBuiltinTheme(t, "solarized") }
+
+func TestAllBuiltinNames(t *testing.T) {
+	names := Names()
+	nameSet := make(map[string]bool, len(names))
+	for _, n := range names {
+		nameSet[n] = true
+	}
+	expected := []string{"dracula", "nord", "one-dark", "gruvbox", "catppuccin", "tokyo-night", "solarized"}
+	for _, want := range expected {
+		if !nameSet[want] {
+			t.Errorf("Names() missing %q", want)
+		}
 	}
 }
 
