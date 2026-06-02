@@ -28,6 +28,25 @@ type flags struct {
 
 const version = "0.8.0"
 
+const drySample = `NAMESPACE     NAME                        READY   STATUS              RESTARTS   AGE
+default       web-1                       1/1     Running             0          12h
+default       web-2                       0/1     CrashLoopBackOff    7          12h
+default       db-0                        0/1     Pending             0          5m
+default       cache-6b8d4                 0/1     ContainerCreating   0          30s
+default       old-job-x7f2                0/1     Evicted             0          24h
+kube-system   coredns-5d4b                1/1     Running             0          30d
+kube-system   metrics-server              0/1     ImagePullBackOff    3          2h
+default       batch-processor             0/1     Error               1          10m
+default       init-container-pod          0/1     Init:0/1            0          1m
+default       long-running                1/1     Running             0          7d
+default       failed-build-1              0/1     Failed              0          1h
+default       node-affinity-pod           0/1     NodeAffinity        0          15m
+default       big-data                    1/1     Running             0          3d
+default       pending-pod                 0/1     Unknown             0          5m
+default       OOM-killed-app              0/1     OOMKilled           0          1m
+default       terminated-job              0/1     Completed           0          6h
+`
+
 func main() {
 	args := os.Args[1:]
 	if len(args) > 0 {
@@ -244,24 +263,6 @@ func printUpgrade() {
 }
 
 func dryRun(th theme.Theme, useColor bool, shade bool) {
-	sample := `NAMESPACE     NAME                        READY   STATUS              RESTARTS   AGE
-default       web-1                       1/1     Running             0          12h
-default       web-2                       0/1     CrashLoopBackOff    7          12h
-default       db-0                        0/1     Pending             0          5m
-default       cache-6b8d4                 0/1     ContainerCreating   0          30s
-default       old-job-x7f2                0/1     Evicted             0          24h
-kube-system   coredns-5d4b                1/1     Running             0          30d
-kube-system   metrics-server              0/1     ImagePullBackOff    3          2h
-default       batch-processor             0/1     Error               1          10m
-default       init-container-pod          0/1     Init:0/1            0          1m
-default       long-running                1/1     Running             0          7d
-default       failed-build-1              0/1     Failed              0          1h
-default       node-affinity-pod           0/1     NodeAffinity        0          15m
-default       big-data                    1/1     Running             0          3d
-default       pending-pod                 0/1     Unknown             0          5m
-default       OOM-killed-app              0/1     OOMKilled           0          1m
-default       terminated-job              0/1     Completed           0          6h
-`
 	proc := output.Processor{Theme: th, Colour: useColor, Shade: shade}
-	fmt.Print(proc.Process(sample))
+	fmt.Print(proc.Process(drySample))
 }
