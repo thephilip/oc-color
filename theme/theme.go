@@ -54,8 +54,8 @@ func (tf *ThemeFile) ToTheme() Theme {
 var builtins map[string]Theme
 
 func init() {
-	builtins = map[string]Theme{
-		"dracula": dracula(),
+	if builtins == nil {
+		builtins = map[string]Theme{}
 	}
 }
 
@@ -367,22 +367,3 @@ func namedColor(name string, fg bool) string {
 	return c
 }
 
-func dracula() Theme {
-	return Theme{
-		Name: "dracula",
-		Tokens: map[string]TokenStyle{
-			"success": {Color: "#50FA7B"},
-			"warning": {Color: "#F1FA8C"},
-			"error":   {Color: "#FF5555", Bold: true},
-			"info":    {Color: "#8BE9FD"},
-			"accent":  {Color: "#BD93F9"},
-			"pink":    {Color: "#FF79C6"},
-			"orange":  {Color: "#FFB86C"},
-			"dim":     {Color: "#6272A4"},
-			"shade":   {Background: "#2E3040"},
-			"header":  {Color: "#BD93F9", Bold: true, Underline: true},
-			"key":     {Color: "#F1FA8C"},
-			"value":   {Color: "#F8F8F2"},
-		},
-	}
-}
