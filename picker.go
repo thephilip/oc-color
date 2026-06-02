@@ -12,7 +12,7 @@ import (
 )
 
 func runThemePicker() {
-	if !term.IsTerminal(int(os.Stdout.Fd())) {
+	if !term.IsTerminal(int(os.Stdin.Fd())) {
 		fmt.Fprintln(os.Stderr, "error: theme picker requires an interactive terminal")
 		os.Exit(1)
 	}
@@ -74,7 +74,11 @@ func runPickerLoop(themes []string, cursor int) (selected string, ok bool) {
 					cursor = (cursor - 1 + len(themes)) % len(themes)
 				case 'B': // down arrow
 					cursor = (cursor + 1) % len(themes)
+				default:
+					return "", false
 				}
+			} else {
+				return "", false // bare ESC or unrecognized sequence → cancel
 			}
 		case 'k': // vim up
 			cursor = (cursor - 1 + len(themes)) % len(themes)
