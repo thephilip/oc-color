@@ -5,6 +5,31 @@ import (
 	"testing"
 )
 
+func TestLooksLikeYAML_DocMarker(t *testing.T) {
+	if !looksLikeYAML("---\napiVersion: v1\n") {
+		t.Error("expected --- prefix to be detected as YAML")
+	}
+}
+
+func TestLooksLikeYAML_ApiVersion(t *testing.T) {
+	input := "apiVersion: v1\nkind: Pod\nmetadata:\n  name: my-pod\n"
+	if !looksLikeYAML(input) {
+		t.Error("expected apiVersion: prefix to be detected as YAML")
+	}
+}
+
+func TestLooksLikeYAML_ApiVersion_E2E(t *testing.T) {
+	th := testTheme()
+	input := "apiVersion: v1\nkind: Pod\nmetadata:\n  name: my-pod\n"
+	got := highlightYAML(input, th)
+	if !strings.Contains(got, wrapWithTheme("apiVersion", "key", th)) {
+		t.Errorf("apiVersion key not colored in YAML without --- prefix; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("name", "key", th)) {
+		t.Errorf("nested key not colored in YAML without --- prefix; got %q", got)
+	}
+}
+
 func TestHighlightYAML_DocMarker(t *testing.T) {
 	th := testTheme()
 	got := highlightYAML("---\n", th)

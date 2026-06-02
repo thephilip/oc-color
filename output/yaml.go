@@ -8,7 +8,7 @@ import (
 
 func looksLikeYAML(output string) bool {
 	trimmed := strings.TrimLeft(output, " \t\n\r")
-	return strings.HasPrefix(trimmed, "---")
+	return strings.HasPrefix(trimmed, "---") || strings.HasPrefix(trimmed, "apiVersion:")
 }
 
 type yamlHL struct {
