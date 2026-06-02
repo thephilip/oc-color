@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -15,41 +16,40 @@ import (
 )
 
 type flags struct {
-	colorMode       string
-	themeName       string
-	dryRun          bool
-	showVer         bool
-	showHelp        bool
-	listThemes      bool
-	validateTheme   string
-	completionShell string
-	showUpgrade     bool
-	watchMode       bool
-	noShade         bool
+	colorMode     string
+	themeName     string
+	dryRun        bool
+	showVer       bool
+	listThemes    bool
+	validateTheme string
+	watchMode     bool
+	noShade       bool
+	noColor       bool
 }
 
 const version = "0.8.0"
 
 func main() {
-	flags, args := parseFlags(os.Args[1:])
+	args := os.Args[1:]
+	if len(args) > 0 {
+		switch args[0] {
+		case "completion":
+			shell := "bash"
+			if len(args) > 1 {
+				shell = args[1]
+			}
+			printCompletion(shell)
+			return
+		case "upgrade":
+			printUpgrade()
+			return
+		}
+	}
+
+	flags, remaining := parseFlags(args)
 
 	if flags.showVer {
 		fmt.Printf("oc-color v%s\n", version)
-		return
-	}
-
-	if flags.showHelp {
-		printHelp()
-		return
-	}
-
-	if flags.completionShell != "" {
-		printCompletion(flags.completionShell)
-		return
-	}
-
-	if flags.showUpgrade {
-		printUpgrade()
 		return
 	}
 
@@ -97,9 +97,9 @@ func main() {
 
 	proc := output.Processor{Theme: th, Colour: useColor, Shade: shadeEnabled}
 
-	if flags.watchMode || isWatchMode(args) {
+	if flags.watchMode || isWatchMode(remaining) {
 		if !useColor {
-			cmd := exec.Command("oc", args...)
+			cmd := exec.Command("oc", remaining...)
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout = &stdout
 			cmd.Stderr = &stderr
@@ -111,9 +111,9 @@ func main() {
 			}
 			return
 		}
-		watchArgs := args
+		watchArgs := remaining
 		if flags.watchMode {
-			watchArgs = append([]string{"-w"}, args...)
+			watchArgs = append([]string{"-w"}, remaining...)
 		}
 		err := runWatch(watchArgs, &proc)
 		if err != nil && !errors.Is(err, errInterrupted) {
@@ -122,7 +122,7 @@ func main() {
 		return
 	}
 
-	cmd := exec.Command("oc", args...)
+	cmd := exec.Command("oc", remaining...)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
@@ -138,56 +138,25 @@ func main() {
 }
 
 func parseFlags(args []string) (flags, []string) {
-	f := flags{colorMode: "", themeName: "dracula"}
-	var remaining []string
-
-	for i := 0; i < len(args); i++ {
-		arg := args[i]
-		switch {
-		case arg == "--no-color":
-			f.colorMode = "never"
-		case arg == "--no-shade":
-			f.noShade = true
-		case arg == "--color" || strings.HasPrefix(arg, "--color="):
-			f.colorMode = flagValue(arg, "--color", &i, args)
-		case arg == "--theme" || strings.HasPrefix(arg, "--theme="):
-			f.themeName = flagValue(arg, "--theme", &i, args)
-		case arg == "--dry-run":
-			f.dryRun = true
-		case arg == "--version":
-			f.showVer = true
-		case arg == "--help" || arg == "-h":
-			f.showHelp = true
-		case arg == "--list-themes":
-			f.listThemes = true
-		case arg == "--validate-theme" || strings.HasPrefix(arg, "--validate-theme="):
-			f.validateTheme = flagValue(arg, "--validate-theme", &i, args)
-		case arg == "--watch":
-			f.watchMode = true
-		case arg == "completion":
-			f.completionShell = "bash"
-			if i+1 < len(args) && !strings.HasPrefix(args[i+1], "-") {
-				i++
-				f.completionShell = args[i]
-			}
-		case arg == "upgrade":
-			f.showUpgrade = true
-		default:
-			remaining = append(remaining, arg)
-		}
+	f := flags{themeName: "dracula"}
+	fs := flag.NewFlagSet("oc-color", flag.ContinueOnError)
+	fs.StringVar(&f.colorMode,     "color",          "",        "Color mode: always, never, auto")
+	fs.BoolVar(&f.noColor,         "no-color",       false,     "Shorthand for --color=never")
+	fs.BoolVar(&f.noShade,         "no-shade",       false,     "Disable zebra-stripe row shading")
+	fs.StringVar(&f.themeName,     "theme",          "dracula", "Theme name")
+	fs.BoolVar(&f.dryRun,          "dry-run",        false,     "Process sample output to preview colors")
+	fs.BoolVar(&f.showVer,         "version",        false,     "Print version")
+	fs.BoolVar(&f.listThemes,      "list-themes",    false,     "List available themes")
+	fs.StringVar(&f.validateTheme, "validate-theme", "",        "Validate a theme YAML file")
+	fs.BoolVar(&f.watchMode,       "watch",          false,     "Watch mode")
+	fs.Usage = printHelp
+	if err := fs.Parse(args); errors.Is(err, flag.ErrHelp) {
+		os.Exit(0)
 	}
-	return f, remaining
-}
-
-func flagValue(arg, prefix string, i *int, args []string) string {
-	if strings.HasPrefix(arg, prefix+"=") {
-		return strings.TrimPrefix(arg, prefix+"=")
+	if f.noColor {
+		f.colorMode = "never"
 	}
-	if *i+1 < len(args) {
-		*i++
-		return args[*i]
-	}
-	return ""
+	return f, fs.Args()
 }
 
 func resolveColorMode(flagMode, cfgMode string) string {
