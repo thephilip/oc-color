@@ -85,5 +85,5 @@ func colorizeYAMLValue(val string, th theme.Theme) string {
 		(strings.HasPrefix(trimmed, "'") && strings.HasSuffix(trimmed, "'")) {
 		return wrapWithTheme(trimmed, "success", th)
 	}
-	return colorizeScalarValue(val, th)
+	return colorizeScalarValue(trimmed, th)
 }
