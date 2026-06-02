@@ -73,7 +73,7 @@ if err != nil && !errors.Is(err, errInterrupted) {
 }
 ```
 
-`errors` import is already present in the stdlib; no new dependency.
+`errors` is stdlib — add it to the import blocks in both `watch.go` and `main.go`. `bytes` and `io` can be removed from `watch.go` (their only uses are the dead buffer code being removed in Fix 1).
 
 ---
 

@@ -61,7 +61,7 @@ func main() {
 		case "upgrade":
 			printUpgrade()
 			return
-		case "themes":
+		case "themes", "theme":
 			runThemePicker()
 			return
 		}
@@ -172,8 +172,11 @@ func parseFlags(args []string) (flags, []string) {
 	fs.StringVar(&f.validateTheme, "validate-theme", "",        "Validate a theme YAML file")
 	fs.BoolVar(&f.watchMode,       "watch",          false,     "Watch mode")
 	fs.Usage = printHelp
-	if err := fs.Parse(args); errors.Is(err, flag.ErrHelp) {
-		os.Exit(0)
+	if err := fs.Parse(args); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			os.Exit(0)
+		}
+		os.Exit(2)
 	}
 	if noColor {
 		f.colorMode = "never"
