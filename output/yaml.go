@@ -81,47 +81,9 @@ func colorizeYAMLValue(val string, th theme.Theme) string {
 	if trimmed == "" {
 		return val
 	}
-
 	if (strings.HasPrefix(trimmed, "\"") && strings.HasSuffix(trimmed, "\"")) ||
 		(strings.HasPrefix(trimmed, "'") && strings.HasSuffix(trimmed, "'")) {
 		return wrapWithTheme(trimmed, "success", th)
 	}
-
-	switch trimmed {
-	case "true", "false", "yes", "no", "on", "off":
-		return wrapWithTheme(trimmed, "info", th)
-	case "null", "~":
-		return wrapWithTheme(trimmed, "dim", th)
-	}
-
-	if looksNumeric(trimmed) {
-		return wrapWithTheme(trimmed, "accent", th)
-	}
-
-	return val
-}
-
-func looksNumeric(s string) bool {
-	if s == "" {
-		return false
-	}
-	start := 0
-	if s[0] == '-' || s[0] == '+' {
-		start = 1
-		if start >= len(s) {
-			return false
-		}
-	}
-	hasDigit := false
-	hasDot := false
-	for i := start; i < len(s); i++ {
-		if s[i] >= '0' && s[i] <= '9' {
-			hasDigit = true
-		} else if s[i] == '.' && !hasDot {
-			hasDot = true
-		} else {
-			return false
-		}
-	}
-	return hasDigit
+	return colorizeScalarValue(val, th)
 }
