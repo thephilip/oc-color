@@ -24,7 +24,6 @@ type flags struct {
 	validateTheme string
 	watchMode     bool
 	noShade       bool
-	noColor       bool
 }
 
 const version = "0.8.0"
@@ -139,9 +138,10 @@ func main() {
 
 func parseFlags(args []string) (flags, []string) {
 	f := flags{themeName: "dracula"}
+	var noColor bool
 	fs := flag.NewFlagSet("oc-color", flag.ContinueOnError)
 	fs.StringVar(&f.colorMode,     "color",          "",        "Color mode: always, never, auto")
-	fs.BoolVar(&f.noColor,         "no-color",       false,     "Shorthand for --color=never")
+	fs.BoolVar(&noColor,           "no-color",       false,     "Shorthand for --color=never")
 	fs.BoolVar(&f.noShade,         "no-shade",       false,     "Disable zebra-stripe row shading")
 	fs.StringVar(&f.themeName,     "theme",          "dracula", "Theme name")
 	fs.BoolVar(&f.dryRun,          "dry-run",        false,     "Process sample output to preview colors")
@@ -153,7 +153,7 @@ func parseFlags(args []string) (flags, []string) {
 	if err := fs.Parse(args); errors.Is(err, flag.ErrHelp) {
 		os.Exit(0)
 	}
-	if f.noColor {
+	if noColor {
 		f.colorMode = "never"
 	}
 	return f, fs.Args()
