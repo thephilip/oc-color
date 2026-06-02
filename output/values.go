@@ -1,9 +1,15 @@
 package output
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/thephilip/oc-color/theme"
+)
+
+var (
+	ipv4RE  = regexp.MustCompile(`^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(/([0-9]|[1-2][0-9]|3[0-2]))?$`)
+	stampRE = regexp.MustCompile(`^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2}))?$`)
 )
 
 // colorizeScalarValue colorizes an unquoted scalar string using the theme token system.
@@ -21,6 +27,12 @@ func colorizeScalarValue(s string, th theme.Theme) string {
 	}
 	if looksNumeric(trimmed) {
 		return wrapWithTheme(trimmed, "accent", th)
+	}
+	if ipv4RE.MatchString(trimmed) {
+		return wrapWithTheme(trimmed, "accent", th)
+	}
+	if stampRE.MatchString(trimmed) {
+		return wrapWithTheme(trimmed, "dim", th)
 	}
 	return s
 }
