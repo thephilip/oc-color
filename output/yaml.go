@@ -15,6 +15,7 @@ type yamlHL struct {
 	theme       theme.Theme
 	blockScalar bool
 	blockIndent int
+	flowDepth   int
 }
 
 func highlightYAML(input string, th theme.Theme) string {
@@ -38,6 +39,11 @@ func (h *yamlHL) processLine(line string) string {
 	iLen := indentLen(trimmed)
 	indentStr := trimmed[:iLen]
 	content := trimmed[iLen:]
+
+	// Continuation of a multi-line flow collection
+	if h.flowDepth > 0 {
+		return indentStr + h.colorizeFlow(content) + suffix
+	}
 
 	// Block scalar content: color as string until indentation returns to key level
 	if h.blockScalar {
@@ -79,6 +85,8 @@ func (h *yamlHL) processLine(line string) string {
 					h.blockScalar = true
 					h.blockIndent = iLen
 					colored += spaces + wrapWithTheme(valTrimmed, "dim", h.theme)
+				} else if valTrimmed[0] == '[' || valTrimmed[0] == '{' {
+					colored += spaces + h.colorizeFlow(valTrimmed)
 				} else {
 					colored += spaces + h.colorizeValue(valTrimmed)
 				}
@@ -102,6 +110,71 @@ func (h *yamlHL) colorizeValue(s string) string {
 		return wrapWithTheme(trimmed, "success", h.theme)
 	}
 	return colorizeScalarValue(trimmed, h.theme)
+}
+
+// colorizeFlow tokenizes a flow collection string character by character,
+// coloring brackets, commas, keys, and scalar values.
+func (h *yamlHL) colorizeFlow(s string) string {
+	var b strings.Builder
+	i := 0
+	for i < len(s) {
+		c := s[i]
+		switch {
+		case c == '[' || c == '{':
+			b.WriteString(wrapWithTheme(string(c), "pink", h.theme))
+			h.flowDepth++
+			i++
+		case c == ']' || c == '}':
+			if h.flowDepth > 0 {
+				h.flowDepth--
+			}
+			b.WriteString(wrapWithTheme(string(c), "pink", h.theme))
+			i++
+		case c == ',':
+			b.WriteString(wrapWithTheme(",", "dim", h.theme))
+			i++
+		case c == ':':
+			b.WriteString(wrapWithTheme(":", "dim", h.theme))
+			i++
+		case c == ' ' || c == '\t':
+			b.WriteByte(c)
+			i++
+		case c == '"' || c == '\'':
+			quote := c
+			start := i
+			i++
+			for i < len(s) {
+				if s[i] == '\\' {
+					i += 2
+					continue
+				}
+				if s[i] == quote {
+					i++
+					break
+				}
+				i++
+			}
+			b.WriteString(wrapWithTheme(s[start:i], "success", h.theme))
+		default:
+			// read an unquoted token
+			start := i
+			for i < len(s) && s[i] != ',' && s[i] != ']' && s[i] != '}' && s[i] != ':' && s[i] != ' ' && s[i] != '\t' {
+				i++
+			}
+			token := s[start:i]
+			// peek past whitespace to detect key (token followed by ':')
+			j := i
+			for j < len(s) && (s[j] == ' ' || s[j] == '\t') {
+				j++
+			}
+			if j < len(s) && s[j] == ':' {
+				b.WriteString(wrapWithTheme(token, "key", h.theme))
+			} else {
+				b.WriteString(colorizeScalarValue(token, h.theme))
+			}
+		}
+	}
+	return b.String()
 }
 
 // isBlockScalarHeader reports whether s is a YAML block scalar indicator:

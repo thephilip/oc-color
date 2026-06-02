@@ -176,3 +176,65 @@ func TestHighlightYAML_BlockScalar_BlankLineInside(t *testing.T) {
 		t.Errorf("key after block scalar not recognized; got %q", got)
 	}
 }
+
+func TestHighlightYAML_FlowSequence_Brackets(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML("labels: [app=myapp, tier=frontend]\n", th)
+	if !strings.Contains(got, wrapWithTheme("[", "pink", th)) {
+		t.Errorf("opening bracket not colored pink; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("]", "pink", th)) {
+		t.Errorf("closing bracket not colored pink; got %q", got)
+	}
+}
+
+func TestHighlightYAML_FlowSequence_Comma(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML("labels: [app=myapp, tier=frontend]\n", th)
+	if !strings.Contains(got, wrapWithTheme(",", "dim", th)) {
+		t.Errorf("comma not colored dim; got %q", got)
+	}
+}
+
+func TestHighlightYAML_FlowMapping_Braces(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML("options: {key: val}\n", th)
+	if !strings.Contains(got, wrapWithTheme("{", "pink", th)) {
+		t.Errorf("opening brace not colored pink; got %q", got)
+	}
+	if !strings.Contains(got, wrapWithTheme("}", "pink", th)) {
+		t.Errorf("closing brace not colored pink; got %q", got)
+	}
+}
+
+func TestHighlightYAML_FlowMapping_Key(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML("options: {timeout: 30}\n", th)
+	if !strings.Contains(got, wrapWithTheme("timeout", "key", th)) {
+		t.Errorf("key inside flow mapping not colored; got %q", got)
+	}
+}
+
+func TestHighlightYAML_FlowSequence_IPv4Items(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML("ips: [192.168.1.1, 10.0.0.1]\n", th)
+	if !strings.Contains(got, wrapWithTheme("192.168.1.1", "accent", th)) {
+		t.Errorf("IPv4 inside flow sequence not colored accent; got %q", got)
+	}
+}
+
+func TestHighlightYAML_FlowSequence_BoolItems(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML("flags: [true, false]\n", th)
+	if !strings.Contains(got, wrapWithTheme("true", "info", th)) {
+		t.Errorf("bool inside flow sequence not colored info; got %q", got)
+	}
+}
+
+func TestHighlightYAML_FlowSequence_QuotedItems(t *testing.T) {
+	th := testTheme()
+	got := highlightYAML(`tags: ["prod", "web"]` + "\n", th)
+	if !strings.Contains(got, wrapWithTheme(`"prod"`, "success", th)) {
+		t.Errorf("quoted string inside flow sequence not colored success; got %q", got)
+	}
+}
