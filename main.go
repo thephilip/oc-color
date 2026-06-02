@@ -219,7 +219,18 @@ Themes:  ~/.config/oc-color/themes/*.yaml
 `)
 }
 
+func goInstalled(lookPath func(string) (string, error)) bool {
+	_, err := lookPath("go")
+	return err == nil
+}
+
 func printUpgrade() {
+	if !goInstalled(exec.LookPath) {
+		fmt.Fprintln(os.Stderr, "error: 'oc color upgrade' requires Go to be installed.")
+		fmt.Fprintln(os.Stderr, "Install Go from https://golang.org/dl, then re-run this command.")
+		fmt.Fprintln(os.Stderr, "If you installed via Krew, upgrade with: kubectl krew upgrade oc-color")
+		os.Exit(1)
+	}
 	fmt.Println("Upgrading oc-color to the latest version...")
 	cmd := exec.Command("go", "install", "github.com/thephilip/oc-color@latest")
 	cmd.Env = append(os.Environ(), "GOPROXY=direct")
