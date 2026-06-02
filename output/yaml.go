@@ -11,61 +11,59 @@ func looksLikeYAML(output string) bool {
 	return strings.HasPrefix(trimmed, "---")
 }
 
+type yamlHL struct {
+	theme theme.Theme
+}
+
 func highlightYAML(input string, th theme.Theme) string {
+	h := &yamlHL{theme: th}
 	lines := strings.SplitAfter(input, "\n")
 	var b strings.Builder
 	for _, line := range lines {
-		b.WriteString(highlightYAMLLine(line, th))
+		b.WriteString(h.processLine(line))
 	}
 	return b.String()
 }
 
-func highlightYAMLLine(line string, th theme.Theme) string {
+func (h *yamlHL) processLine(line string) string {
 	trimmed := strings.TrimRight(line, "\n\r")
 	suffix := line[len(trimmed):]
-	line = trimmed
 
-	if strings.TrimSpace(line) == "" {
-		return line + suffix
+	if strings.TrimSpace(trimmed) == "" {
+		return line
 	}
 
-	var indent string
-	i := 0
-	for i < len(line) && (line[i] == ' ' || line[i] == '\t') {
-		indent += string(line[i])
-		i++
-	}
-	line = line[i:]
+	iLen := indentLen(trimmed)
+	indentStr := trimmed[:iLen]
+	content := trimmed[iLen:]
 
-	if line == "---" || line == "..." {
-		return indent + wrapWithTheme(line, "pink", th) + suffix
+	if content == "---" || content == "..." {
+		return indentStr + wrapWithTheme(content, "pink", h.theme) + suffix
 	}
 
-	if strings.HasPrefix(line, "#") {
-		return indent + wrapWithTheme(line, "dim", th) + suffix
+	if strings.HasPrefix(content, "#") {
+		return indentStr + wrapWithTheme(content, "dim", h.theme) + suffix
 	}
 
-	// List item
-	if strings.HasPrefix(line, "- ") || line == "-" {
+	if strings.HasPrefix(content, "- ") || content == "-" {
 		rest := ""
-		if len(line) > 2 {
-			rest = line[2:]
+		if len(content) > 2 {
+			rest = content[2:]
 		}
-		return indent + wrapWithTheme("-", "pink", th) + " " + colorizeYAMLValue(rest, th) + suffix
+		return indentStr + wrapWithTheme("-", "pink", h.theme) + " " + h.colorizeValue(rest) + suffix
 	}
 
-	// Key-value
-	if idx := strings.Index(line, ":"); idx >= 0 {
-		key := line[:idx]
-		afterColon := line[idx+1:]
+	if idx := strings.Index(content, ":"); idx >= 0 {
+		key := content[:idx]
+		afterColon := content[idx+1:]
 
 		if key != "" && !strings.Contains(key, " ") {
-			colored := indent + wrapWithTheme(key, "key", th) + ":"
+			colored := indentStr + wrapWithTheme(key, "key", h.theme) + ":"
 
-			trimmedVal := strings.TrimSpace(afterColon)
-			if trimmedVal != "" {
+			valTrimmed := strings.TrimSpace(afterColon)
+			if valTrimmed != "" {
 				spaces := afterColon[:len(afterColon)-len(strings.TrimLeft(afterColon, " "))]
-				colored += spaces + colorizeYAMLValue(trimmedVal, th)
+				colored += spaces + h.colorizeValue(valTrimmed)
 			} else {
 				colored += afterColon
 			}
@@ -73,17 +71,26 @@ func highlightYAMLLine(line string, th theme.Theme) string {
 		}
 	}
 
-	return indent + line + suffix
+	return line
 }
 
-func colorizeYAMLValue(val string, th theme.Theme) string {
-	trimmed := strings.TrimSpace(val)
+func (h *yamlHL) colorizeValue(s string) string {
+	trimmed := strings.TrimSpace(s)
 	if trimmed == "" {
-		return val
+		return s
 	}
 	if (strings.HasPrefix(trimmed, "\"") && strings.HasSuffix(trimmed, "\"")) ||
 		(strings.HasPrefix(trimmed, "'") && strings.HasSuffix(trimmed, "'")) {
-		return wrapWithTheme(trimmed, "success", th)
+		return wrapWithTheme(trimmed, "success", h.theme)
 	}
-	return colorizeScalarValue(trimmed, th)
+	return colorizeScalarValue(trimmed, h.theme)
+}
+
+func indentLen(s string) int {
+	for i := 0; i < len(s); i++ {
+		if s[i] != ' ' && s[i] != '\t' {
+			return i
+		}
+	}
+	return len(s)
 }
