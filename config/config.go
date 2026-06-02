@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -48,6 +49,24 @@ func Load() (Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func Save(cfg Config) (string, error) {
+	path, err := configFilePath()
+	if err != nil {
+		return "", fmt.Errorf("cannot resolve config path: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return "", fmt.Errorf("cannot create config directory: %w", err)
+	}
+	data, err := yaml.Marshal(cfg)
+	if err != nil {
+		return "", fmt.Errorf("cannot marshal config: %w", err)
+	}
+	if err := os.WriteFile(path, data, 0644); err != nil {
+		return "", fmt.Errorf("cannot write config: %w", err)
+	}
+	return path, nil
 }
 
 func configFilePath() (string, error) {
