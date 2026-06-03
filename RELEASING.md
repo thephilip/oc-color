@@ -35,6 +35,18 @@ git push origin v0.9.0
 This triggers the GitHub Actions release workflow. Go to
 https://github.com/thephilip/oc-color/actions to monitor progress (~3 minutes).
 
+### Troubleshooting
+
+**Tagged the wrong commit or need to redo a release?**
+
+```bash
+git tag -d v0.9.0              # delete local tag
+git push origin --delete v0.9.0  # delete remote tag
+# Fix the issue, then re-run from step 1
+```
+
+Note: GoReleaser will also have created a GitHub release — delete it at https://github.com/thephilip/oc-color/releases before re-tagging.
+
 ### 4. Download checksums
 
 Once the workflow completes, the release appears at
@@ -43,6 +55,8 @@ https://github.com/thephilip/oc-color/releases. Download `checksums.txt`:
 ```bash
 gh release download v0.9.0 -R thephilip/oc-color --pattern checksums.txt
 ```
+
+**Note:** If the command fails because assets aren't ready yet, wait a moment and retry — GoReleaser can occasionally take longer than 3 minutes.
 
 ### 5. Update `oc-color.yaml`
 
@@ -60,6 +74,8 @@ ghi789...  oc-color_0.9.0_darwin_amd64.tar.gz
 jkl012...  oc-color_0.9.0_darwin_arm64.tar.gz
 mno345...  oc-color_0.9.0_windows_amd64.zip
 ```
+
+Copy the exact hex hash from each line — do not type these manually.
 
 ### 6. Commit and push `oc-color.yaml`
 
@@ -101,7 +117,7 @@ Go to https://github.com/kubernetes-sigs/krew-index and open a pull request from
 your fork. Follow the PR template — reviewers will check that:
 - SHA256s are correct
 - URIs resolve to real release assets
-- The manifest validates with `kubectl krew install --manifest=plugins/oc-color.yaml`
+- The manifest can be validated locally with `kubectl krew install --manifest=plugins/oc-color.yaml` (requires krew installed)
 
 ### 5. Future releases
 
