@@ -61,7 +61,7 @@ gh release download v0.9.0 -R thephilip/oc-color --pattern checksums.txt
 ### 5. Update `oc-color.yaml`
 
 In `oc-color.yaml`, update:
-- `spec.version` to `"0.9.0"`
+- `spec.version` to `"v0.9.0"` (must include the `v` prefix — krew requires it)
 - All five `uri` fields: replace `0.8.0` with `0.9.0` (in both the tag path and filename)
 - All five `sha256` fields: copy values from `checksums.txt` matching each archive name
 
