@@ -51,13 +51,6 @@ func main() {
 	args := os.Args[1:]
 	if len(args) > 0 {
 		switch args[0] {
-		case "completion":
-			shell := "bash"
-			if len(args) > 1 {
-				shell = args[1]
-			}
-			printCompletion(shell)
-			return
 		case "upgrade":
 			printUpgrade()
 			return
@@ -215,7 +208,6 @@ func printHelp() {
 
 Usage:
   oc color [flags] -- <oc-args>
-  oc color completion <bash|zsh|fish>
   oc color upgrade
   oc color themes
 
@@ -243,11 +235,6 @@ Examples:
   oc color --validate-theme ~/.config/oc-color/themes/nord.yaml
   oc color --dry-run
   oc color themes              # interactive theme picker
-
-  # Generate shell completion scripts:
-  oc color completion bash > /etc/bash_completion.d/oc-color
-  oc color completion zsh  > /usr/share/zsh/site-functions/_oc-color
-  oc color completion fish > ~/.config/fish/completions/oc-color.fish
 
 Config: ~/.config/oc-color/config.yaml
 Themes:  ~/.config/oc-color/themes/*.yaml

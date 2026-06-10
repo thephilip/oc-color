@@ -67,7 +67,6 @@ oc color --dry-run
 | `--dry-run` | Process sample output to preview colors |
 | `--version` | Print version |
 | `--help`, `-h` | Show help |
-| `completion <shell>` | Generate shell completion script (`bash`, `zsh`, `fish`) |
 
 ## Configuration
 
@@ -136,11 +135,34 @@ oc color --list-themes
 
 # Preview color output without a cluster
 oc color --dry-run
+```
 
-# Generate shell completion scripts
-oc color completion bash > /etc/bash_completion.d/oc-color
-oc color completion zsh > /usr/share/zsh/site-functions/_oc-color
-oc color completion fish > ~/.config/fish/completions/oc-color.fish
+## Shell completions
+
+`oc-color` is a transparent wrapper — it passes all arguments directly to `oc`. If you alias `oc=oc-color`, you want `oc`'s completions to keep working, not `oc-color`'s.
+
+Tell your shell to use `oc`'s completion function for `oc-color`:
+
+**zsh** — add after the alias in your `.zshrc`:
+
+```zsh
+alias oc=oc-color
+compdef oc-color=oc
+```
+
+**bash** — add after loading `oc` completions in your `.bashrc`:
+
+```bash
+alias oc=oc-color
+complete -F __start_oc oc-color
+```
+
+> The function name `__start_oc` is what `oc completion bash` registers. Verify with `complete -p oc` after loading completions.
+
+**fish** — fish resolves completions via the aliased binary, so this usually works automatically when you alias `oc` to `oc-color`. If not, copy `oc`'s completion file:
+
+```fish
+cp (status fish-path)/vendor_completions.d/oc.fish ~/.config/fish/completions/oc-color.fish
 ```
 
 ## Development
