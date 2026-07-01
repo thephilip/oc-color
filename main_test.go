@@ -48,6 +48,54 @@ func TestParseFlagsWatchPassthrough(t *testing.T) {
 	}
 }
 
+func TestParseFlagsUnknownShortFlags(t *testing.T) {
+	f, remaining := parseFlags([]string{"-n", "openshift-monitoring", "get", "pods"})
+	if f.dryRun || f.showVer || f.watchMode {
+		t.Error("no oc-color flags should be set")
+	}
+	want := []string{"-n", "openshift-monitoring", "get", "pods"}
+	if len(remaining) != len(want) {
+		t.Fatalf("remaining: want %v, got %v", want, remaining)
+	}
+	for i, v := range want {
+		if remaining[i] != v {
+			t.Errorf("remaining[%d]: want %q, got %q", i, v, remaining[i])
+		}
+	}
+}
+
+func TestParseFlagsMixedOcColorAndOc(t *testing.T) {
+	f, remaining := parseFlags([]string{"--theme", "nord", "-n", "default", "get", "pods", "-o", "wide"})
+	if f.themeName != "nord" {
+		t.Errorf("theme: want %q, got %q", "nord", f.themeName)
+	}
+	want := []string{"-n", "default", "get", "pods", "-o", "wide"}
+	if len(remaining) != len(want) {
+		t.Fatalf("remaining: want %v, got %v", want, remaining)
+	}
+	for i, v := range want {
+		if remaining[i] != v {
+			t.Errorf("remaining[%d]: want %q, got %q", i, v, remaining[i])
+		}
+	}
+}
+
+func TestParseFlagsDoubleDashPassthrough(t *testing.T) {
+	f, remaining := parseFlags([]string{"--watch", "--", "-n", "foo", "get", "pods"})
+	if !f.watchMode {
+		t.Error("--watch should be set")
+	}
+	want := []string{"--", "-n", "foo", "get", "pods"}
+	if len(remaining) != len(want) {
+		t.Fatalf("remaining: want %v, got %v", want, remaining)
+	}
+	for i, v := range want {
+		if remaining[i] != v {
+			t.Errorf("remaining[%d]: want %q, got %q", i, v, remaining[i])
+		}
+	}
+}
+
 func TestGoInstalled(t *testing.T) {
 	found := goInstalled(func(name string) (string, error) {
 		return "/usr/local/go/bin/go", nil

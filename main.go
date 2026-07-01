@@ -160,6 +160,8 @@ func main() {
 }
 
 func parseFlags(args []string) (flags, []string) {
+	ours, passthrough := splitFlags(args)
+
 	f := flags{}
 	var noColor bool
 	fs := flag.NewFlagSet("oc-color", flag.ContinueOnError)
@@ -173,7 +175,7 @@ func parseFlags(args []string) (flags, []string) {
 	fs.StringVar(&f.validateTheme, "validate-theme", "",        "Validate a theme YAML file")
 	fs.BoolVar(&f.watchMode,       "watch",          false,     "Watch mode")
 	fs.Usage = printHelp
-	if err := fs.Parse(args); err != nil {
+	if err := fs.Parse(ours); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
 			os.Exit(0)
 		}
@@ -182,7 +184,45 @@ func parseFlags(args []string) (flags, []string) {
 	if noColor {
 		f.colorMode = "never"
 	}
-	return f, fs.Args()
+	remaining := append(fs.Args(), passthrough...)
+	return f, remaining
+}
+
+func splitFlags(args []string) (ours, passthrough []string) {
+	valueFlags := map[string]bool{
+		"--color": true, "--theme": true, "--validate-theme": true,
+	}
+	boolFlags := map[string]bool{
+		"--no-color": true, "--no-shade": true, "--dry-run": true,
+		"--version": true, "--list-themes": true, "--watch": true,
+		"--help": true, "-h": true,
+	}
+
+	for i := 0; i < len(args); i++ {
+		a := args[i]
+		if a == "--" {
+			passthrough = append(passthrough, args[i:]...)
+			return
+		}
+		if key, _, ok := strings.Cut(a, "="); ok && (valueFlags[key] || boolFlags[key]) {
+			ours = append(ours, a)
+			continue
+		}
+		if boolFlags[a] {
+			ours = append(ours, a)
+			continue
+		}
+		if valueFlags[a] {
+			ours = append(ours, a)
+			if i+1 < len(args) {
+				i++
+				ours = append(ours, args[i])
+			}
+			continue
+		}
+		passthrough = append(passthrough, a)
+	}
+	return
 }
 
 func resolveColorMode(flagMode, cfgMode string) string {
