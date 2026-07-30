@@ -3,111 +3,111 @@
 <circle cx="20" cy="20" r="6" fill="#ff5f56"/>
 <circle cx="40" cy="20" r="6" fill="#ffbd2e"/>
 <circle cx="60" cy="20" r="6" fill="#27c93f"/>
-<text x="20" y="70" fill="#636d83">$</text>
-<text x="36.8" y="70" fill="#f8f8f2">oc color get pods</text>
-<text x="20.0" y="90" fill="#bd93f9" font-weight="bold" text-decoration="underline">NAMESPACE     NAME                        READY   STATUS              RESTARTS   AGE</text>
-<text x="20.0" y="110" fill="#f8f8f2">default       web-1                       </text>
-<text x="372.8" y="110" fill="#50fa7b">1/1</text>
-<text x="398.0" y="110" fill="#f8f8f2">     </text>
-<text x="440.0" y="110" fill="#50fa7b">Running</text>
-<text x="498.8" y="110" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="110" fill="#6272a4">12h</text>
+<text x="20" y="70" fill="#636d83" xml:space="preserve">$</text>
+<text x="36.8" y="70" fill="#f8f8f2" textLength="142.8" lengthAdjust="spacing" xml:space="preserve">oc-color get pods</text>
+<text x="20.0" y="90" textLength="705.6" lengthAdjust="spacing" xml:space="preserve" fill="#bd93f9" font-weight="bold" text-decoration="underline">NAMESPACE     NAME                        READY   STATUS              RESTARTS   AGE</text>
+<text x="20.0" y="110" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       web-1                       </text>
+<text x="372.8" y="110" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">1/1</text>
+<text x="398.0" y="110" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="110" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">Running</text>
+<text x="498.8" y="110" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="110" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">12h</text>
 <rect x="0" y="116" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="130" fill="#f8f8f2">default       web-2                       </text>
-<text x="372.8" y="130" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="130" fill="#f8f8f2">     </text>
-<text x="440.0" y="130" fill="#ff5555" font-weight="bold">CrashLoopBackOff</text>
-<text x="574.4" y="130" fill="#f8f8f2">    7          </text>
-<text x="700.4" y="130" fill="#6272a4">12h</text>
-<text x="20.0" y="150" fill="#f8f8f2">default       db-0                        </text>
-<text x="372.8" y="150" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="150" fill="#f8f8f2">     </text>
-<text x="440.0" y="150" fill="#f1fa8c">Pending</text>
-<text x="498.8" y="150" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="150" fill="#6272a4">5m</text>
+<text x="20.0" y="130" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       web-2                       </text>
+<text x="372.8" y="130" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="130" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="130" textLength="134.4" lengthAdjust="spacing" xml:space="preserve" fill="#ff5555" font-weight="bold">CrashLoopBackOff</text>
+<text x="574.4" y="130" textLength="126.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">    7          </text>
+<text x="700.4" y="130" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">12h</text>
+<text x="20.0" y="150" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       db-0                        </text>
+<text x="372.8" y="150" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="150" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="150" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">Pending</text>
+<text x="498.8" y="150" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="150" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">5m</text>
 <rect x="0" y="156" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="170" fill="#f8f8f2">default       cache-6b8d4                 </text>
-<text x="372.8" y="170" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="170" fill="#f8f8f2">     </text>
-<text x="440.0" y="170" fill="#f1fa8c">ContainerCreating</text>
-<text x="582.8000000000001" y="170" fill="#f8f8f2">   0          </text>
-<text x="700.4" y="170" fill="#6272a4">30s</text>
-<text x="20.0" y="190" fill="#f8f8f2">default       old-job-x7f2                </text>
-<text x="372.8" y="190" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="190" fill="#f8f8f2">     </text>
-<text x="440.0" y="190" fill="#ff5555" font-weight="bold">Evicted</text>
-<text x="498.8" y="190" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="190" fill="#6272a4">24h</text>
+<text x="20.0" y="170" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       cache-6b8d4                 </text>
+<text x="372.8" y="170" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="170" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="170" textLength="142.8" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">ContainerCreating</text>
+<text x="582.8000000000001" y="170" textLength="117.60000000000001" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">   0          </text>
+<text x="700.4" y="170" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">30s</text>
+<text x="20.0" y="190" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       old-job-x7f2                </text>
+<text x="372.8" y="190" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="190" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="190" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#ff5555" font-weight="bold">Evicted</text>
+<text x="498.8" y="190" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="190" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">24h</text>
 <rect x="0" y="196" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="210" fill="#f8f8f2">kube-system   coredns-5d4b                </text>
-<text x="372.8" y="210" fill="#50fa7b">1/1</text>
-<text x="398.0" y="210" fill="#f8f8f2">     </text>
-<text x="440.0" y="210" fill="#50fa7b">Running</text>
-<text x="498.8" y="210" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="210" fill="#6272a4">30d</text>
-<text x="20.0" y="230" fill="#f8f8f2">kube-system   metrics-server              </text>
-<text x="372.8" y="230" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="230" fill="#f8f8f2">     </text>
-<text x="440.0" y="230" fill="#ff5555" font-weight="bold">ImagePullBackOff</text>
-<text x="574.4" y="230" fill="#f8f8f2">    3          </text>
-<text x="700.4" y="230" fill="#6272a4">2h</text>
+<text x="20.0" y="210" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">kube-system   coredns-5d4b                </text>
+<text x="372.8" y="210" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">1/1</text>
+<text x="398.0" y="210" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="210" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">Running</text>
+<text x="498.8" y="210" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="210" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">30d</text>
+<text x="20.0" y="230" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">kube-system   metrics-server              </text>
+<text x="372.8" y="230" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="230" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="230" textLength="134.4" lengthAdjust="spacing" xml:space="preserve" fill="#ff5555" font-weight="bold">ImagePullBackOff</text>
+<text x="574.4" y="230" textLength="126.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">    3          </text>
+<text x="700.4" y="230" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">2h</text>
 <rect x="0" y="236" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="250" fill="#f8f8f2">default       batch-processor             </text>
-<text x="372.8" y="250" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="250" fill="#f8f8f2">     </text>
-<text x="440.0" y="250" fill="#ff5555" font-weight="bold">Error</text>
-<text x="482.0" y="250" fill="#f8f8f2">               1          </text>
-<text x="700.4" y="250" fill="#6272a4">10m</text>
-<text x="20.0" y="270" fill="#f8f8f2">default       init-container-pod          </text>
-<text x="372.8" y="270" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="270" fill="#f8f8f2">     </text>
-<text x="440.0" y="270" fill="#f1fa8c">Init:0/1</text>
-<text x="507.20000000000005" y="270" fill="#f8f8f2">            0          </text>
-<text x="700.4" y="270" fill="#6272a4">1m</text>
+<text x="20.0" y="250" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       batch-processor             </text>
+<text x="372.8" y="250" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="250" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="250" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#ff5555" font-weight="bold">Error</text>
+<text x="482.0" y="250" textLength="218.4" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">               1          </text>
+<text x="700.4" y="250" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">10m</text>
+<text x="20.0" y="270" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       init-container-pod          </text>
+<text x="372.8" y="270" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="270" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="270" textLength="67.2" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">Init:0/1</text>
+<text x="507.20000000000005" y="270" textLength="193.20000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">            0          </text>
+<text x="700.4" y="270" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">1m</text>
 <rect x="0" y="276" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="290" fill="#f8f8f2">default       long-running                </text>
-<text x="372.8" y="290" fill="#50fa7b">1/1</text>
-<text x="398.0" y="290" fill="#f8f8f2">     </text>
-<text x="440.0" y="290" fill="#50fa7b">Running</text>
-<text x="498.8" y="290" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="290" fill="#6272a4">7d</text>
-<text x="20.0" y="310" fill="#f8f8f2">default       failed-build-1              </text>
-<text x="372.8" y="310" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="310" fill="#f8f8f2">     </text>
-<text x="440.0" y="310" fill="#ff5555" font-weight="bold">Failed</text>
-<text x="490.40000000000003" y="310" fill="#f8f8f2">              0          </text>
-<text x="700.4" y="310" fill="#6272a4">1h</text>
+<text x="20.0" y="290" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       long-running                </text>
+<text x="372.8" y="290" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">1/1</text>
+<text x="398.0" y="290" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="290" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">Running</text>
+<text x="498.8" y="290" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="290" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">7d</text>
+<text x="20.0" y="310" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       failed-build-1              </text>
+<text x="372.8" y="310" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="310" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="310" textLength="50.400000000000006" lengthAdjust="spacing" xml:space="preserve" fill="#ff5555" font-weight="bold">Failed</text>
+<text x="490.40000000000003" y="310" textLength="210.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">              0          </text>
+<text x="700.4" y="310" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">1h</text>
 <rect x="0" y="316" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="330" fill="#f8f8f2">default       node-affinity-pod           </text>
-<text x="372.8" y="330" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="330" fill="#f8f8f2">     </text>
-<text x="440.0" y="330" fill="#f1fa8c">NodeAffinity</text>
-<text x="540.8000000000001" y="330" fill="#f8f8f2">        0          </text>
-<text x="700.4" y="330" fill="#6272a4">15m</text>
-<text x="20.0" y="350" fill="#f8f8f2">default       big-data                    </text>
-<text x="372.8" y="350" fill="#50fa7b">1/1</text>
-<text x="398.0" y="350" fill="#f8f8f2">     </text>
-<text x="440.0" y="350" fill="#50fa7b">Running</text>
-<text x="498.8" y="350" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="350" fill="#6272a4">3d</text>
+<text x="20.0" y="330" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       node-affinity-pod           </text>
+<text x="372.8" y="330" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="330" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="330" textLength="100.80000000000001" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">NodeAffinity</text>
+<text x="540.8000000000001" y="330" textLength="159.6" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">        0          </text>
+<text x="700.4" y="330" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">15m</text>
+<text x="20.0" y="350" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       big-data                    </text>
+<text x="372.8" y="350" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">1/1</text>
+<text x="398.0" y="350" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="350" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">Running</text>
+<text x="498.8" y="350" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="350" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">3d</text>
 <rect x="0" y="356" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="370" fill="#f8f8f2">default       pending-pod                 </text>
-<text x="372.8" y="370" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="370" fill="#f8f8f2">     </text>
-<text x="440.0" y="370" fill="#f1fa8c">Unknown</text>
-<text x="498.8" y="370" fill="#f8f8f2">             0          </text>
-<text x="700.4" y="370" fill="#6272a4">5m</text>
-<text x="20.0" y="390" fill="#f8f8f2">default       OOM-killed-app              </text>
-<text x="372.8" y="390" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="390" fill="#f8f8f2">     </text>
-<text x="440.0" y="390" fill="#ff5555" font-weight="bold">OOMKilled</text>
-<text x="515.6" y="390" fill="#f8f8f2">           0          </text>
-<text x="700.4" y="390" fill="#6272a4">1m</text>
+<text x="20.0" y="370" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       pending-pod                 </text>
+<text x="372.8" y="370" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="370" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="370" textLength="58.800000000000004" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">Unknown</text>
+<text x="498.8" y="370" textLength="201.60000000000002" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">             0          </text>
+<text x="700.4" y="370" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">5m</text>
+<text x="20.0" y="390" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       OOM-killed-app              </text>
+<text x="372.8" y="390" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="390" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="390" textLength="75.60000000000001" lengthAdjust="spacing" xml:space="preserve" fill="#ff5555" font-weight="bold">OOMKilled</text>
+<text x="515.6" y="390" textLength="184.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">           0          </text>
+<text x="700.4" y="390" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">1m</text>
 <rect x="0" y="396" width="755.6" height="20" fill="#2e3040"/>
-<text x="20.0" y="410" fill="#f8f8f2">default       terminated-job              </text>
-<text x="372.8" y="410" fill="#f1fa8c">0/1</text>
-<text x="398.0" y="410" fill="#f8f8f2">     </text>
-<text x="440.0" y="410" fill="#50fa7b">Completed</text>
-<text x="515.6" y="410" fill="#f8f8f2">           0          </text>
-<text x="700.4" y="410" fill="#6272a4">6h</text>
+<text x="20.0" y="410" textLength="352.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">default       terminated-job              </text>
+<text x="372.8" y="410" textLength="25.200000000000003" lengthAdjust="spacing" xml:space="preserve" fill="#f1fa8c">0/1</text>
+<text x="398.0" y="410" textLength="42.0" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">     </text>
+<text x="440.0" y="410" textLength="75.60000000000001" lengthAdjust="spacing" xml:space="preserve" fill="#50fa7b">Completed</text>
+<text x="515.6" y="410" textLength="184.8" lengthAdjust="spacing" xml:space="preserve" fill="#f8f8f2">           0          </text>
+<text x="700.4" y="410" textLength="16.8" lengthAdjust="spacing" xml:space="preserve" fill="#6272a4">6h</text>
 </svg>

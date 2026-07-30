@@ -105,8 +105,15 @@ def make_spans(text, state, col, y):
     spans = []
     x = PAD_X + col * CHAR_W
     ty = TITLE_H + PAD_Y + y * LINE_H + 14
+    text_w = len(text) * CHAR_W
 
-    attrs = [f'x="{x}"', f'y="{ty}"']
+    attrs = [
+        f'x="{x}"',
+        f'y="{ty}"',
+        f'textLength="{text_w}"',
+        'lengthAdjust="spacing"',
+        'xml:space="preserve"',
+    ]
     fill = state["fg"] or "#f8f8f2"
     if state["dim"]:
         attrs.append('opacity="0.5"')
@@ -159,8 +166,16 @@ def main():
     line_offset = 0
     if prompt_line:
         ty = TITLE_H + PAD_Y + 14
-        svg.append(f'<text x="{PAD_X}" y="{ty}" fill="{PROMPT_COLOR}">$</text>')
-        svg.append(f'<text x="{PAD_X + 2 * CHAR_W}" y="{ty}" fill="#f8f8f2">{escape(prompt_line)}</text>')
+        prompt_w = len(prompt_line) * CHAR_W
+        svg.append(
+            f'<text x="{PAD_X}" y="{ty}" fill="{PROMPT_COLOR}" '
+            f'xml:space="preserve">$</text>'
+        )
+        svg.append(
+            f'<text x="{PAD_X + 2 * CHAR_W}" y="{ty}" fill="#f8f8f2" '
+            f'textLength="{prompt_w}" lengthAdjust="spacing" '
+            f'xml:space="preserve">{escape(prompt_line)}</text>'
+        )
         line_offset = 1
 
     for i, line in enumerate(lines):
